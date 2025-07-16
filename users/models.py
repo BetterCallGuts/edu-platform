@@ -13,8 +13,8 @@ class User(AbstractUser):
     role          = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
     student_limit = models.IntegerField(default=0, null=True , blank=True, verbose_name=_('Student Limit'))
 
-    teacher       = models.ForeignKey(
-        'self', on_delete=models.CASCADE, 
+    teacher       = models.ManyToManyField(
+        'self', 
         related_name='students', 
         null=True, blank=True,
         verbose_name=_('Teacher')

@@ -50,7 +50,12 @@ class UserAdmin(BaseUserAdmin):
 
         if request.user.role == 'teacher' and not obj.teacher and obj.role == 'student':
             obj.teacher = request.user
+        
+        # if request.user.role == "teacher" and obj.role == 'student':
+
         super().save_model(request, obj, form, change)
+
+    
 
     def get_role_opetions(self, request):
         pass

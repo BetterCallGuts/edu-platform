@@ -115,12 +115,17 @@ class CourseImages(models.Model):
 
 class Episode(models.Model):
 
-     course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True , verbose_name=_('Course'))
+     course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True , verbose_name=_('Course'),  related_name='episodes')
      owner  = models.ForeignKey(User, on_delete=models.CASCADE , verbose_name=_('Owner'))
 
      episode_name_ar = models.CharField(max_length=100 , verbose_name=_('Episode Name ar'))
      episode_name_en = models.CharField(max_length=100 , verbose_name=_('Episode Name en'))
     
+     is_active       = models.BooleanField(default=True, verbose_name=_('Is Active'))
+
+
+
+     
      episode_description_ar = models.TextField( verbose_name=_('Episode Description ar'))
      episode_description_en = models.TextField( verbose_name=_('Episode Description en'))
      students               = models.ManyToManyField(User, related_name='student', verbose_name=_('Students'))
@@ -131,11 +136,17 @@ class Episode(models.Model):
             
             ])
      
+     created_at      = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
+     updated_at      = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
 
      start_date = models.DateField(verbose_name=_('Start Date'))
      end_date   = models.DateField(verbose_name=_('End Date'))
 
-     expire_date = models.DateField(verbose_name=_('Expire Date'))
+     expire_date = models.IntegerField(
+         verbose_name=_('Expire Date'),
+           null=True, blank=True,
+            help_text=_('How many days to expire' )
+     )
 
      def __str__(self):
          return self.episode_name_ar
@@ -151,3 +162,8 @@ class Episode(models.Model):
      class Meta:
          verbose_name = _('Episode')
          verbose_name_plural = _('Episodes')
+
+
+
+
+
