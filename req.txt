@@ -1,0 +1,6 @@
+django
+pytz
+django-jazzmin
+django-cors-headers
+django-rest-framework
+Pillow

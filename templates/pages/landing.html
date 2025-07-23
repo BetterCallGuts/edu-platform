@@ -1,0 +1,161 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+
+{% block base_title %}Welcome {% endblock %}
+
+{% block extra_header %}
+<link rel="stylesheet" href="{% static 'css/swiper.css' %}">
+<style>
+    swiper-container {
+      position: relative; 
+      width: 100%;
+      height: 100%;
+      padding: 100px 0;
+      z-index: 1;
+    }
+
+    swiper-slide {
+        display: flex;
+        padding: 100px 0;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding-bottom: 100px;
+              z-index: 1;
+        }
+
+        a{
+            display:block;
+            width: 60%;
+        }
+
+    img {
+      border-radius: 10px;
+        width: 100%;
+        height: 70vh;
+        object-position: center ;
+        object-fit:fill;
+
+        
+    }
+  
+
+
+
+@media (width <1024px) {
+
+     a{
+            display:block;
+            width: 100%;
+        }
+
+    img {
+        width: 100%;
+        height: 70vh;
+        object-position: center ;
+        object-fit:fill;
+
+        
+    }
+}
+
+
+.swiper-pagination{
+/* background: black; */
+height: fit-content;
+display: flex;
+
+justify-content: center;  
+gap: 20px;
+}
+.swiper-pagination-bullet{
+  scale: 1.9;
+  transition: .6s, transform;
+}
+
+
+.swiper-pagination-bullet-active{
+  scale: 3;
+  transform: translateY(-3px)
+}
+</style>
+{% endblock %}
+
+{% block content %} 
+
+{% if courses %}
+
+
+    <swiper-container 
+    modules="autoplay  pagination"
+    pagination="true"
+    loop="true"
+    speed="300"
+    init="false"  class="swiper mySwiper">
+    {% for course in courses %}
+            <swiper-slide>
+                <a href="#">
+                    <picture>
+                        {% if course.thumbnail_mobile %}
+                        <source media="(max-width: 1023px)" srcset="{{ course.thumbnail_mobile.url }}">
+                        {% endif %}
+
+                        {% if course.thumbnail_pc %}
+                        <img    src="{{ course.thumbnail_pc.url }}" alt="{{ course.course_name_en }}">
+                        {% endif %}
+                    </picture>
+                </a>
+            </swiper-slide>
+    {% endfor %}
+
+    
+    <div class="swiper-pagination"></div>
+    </swiper-container>
+{% endif %}
+
+
+{% endblock %}
+
+
+{% block extra_footer %}
+
+<script src="{% static 'js/swiper.js' %}" ></script>
+
+<script>
+  customElements.whenDefined('swiper-container').then(() => {
+    const swiperEl = document.querySelector('.mySwiper');
+    Object.assign(swiperEl, {
+      grabCursor: true,
+      effect: "creative",
+      pagination : {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+      },
+      loop: true,
+      creativeEffect: {
+        prev: {
+          shadow: true,
+          translate: [0, 0, -800],
+        },
+        next: {
+          translate: ["100%", 0, -800],
+        },
+
+      },
+    });
+    swiperEl.initialize();
+
+
+
+
+  });
+
+
+</script>
+
+{% endblock%}
