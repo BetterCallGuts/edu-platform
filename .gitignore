@@ -1,0 +1,7 @@
+*.pyc
+media/
+static/
+**/static/
+static_dir_1/
+**/migrations/
+!**/migrations/__init__.py

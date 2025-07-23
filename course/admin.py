@@ -10,6 +10,15 @@ from django.utils import timezone
 User = get_user_model()
 
 
+
+# Actions
+@admin.action(description="Duplicate selected items")
+def duplicate_objects(modeladmin, request, queryset):
+    for obj in queryset:
+        obj.pk = None  # Reset the primary key
+        obj.save()
+
+
 # Filters
 class CourseLevelFilter(admin.SimpleListFilter):
     title = _('Course Level')
@@ -92,7 +101,7 @@ class TypeInline(admin.TabularInline):
     verbose_name = _('Type')
     verbose_name_plural = _('Types')
 
-class EpisodeInline(admin.TabularInline):
+class EpisodeInline(admin.StackedInline):
     model = Episode
     fk_name = 'course'
     extra = 0
@@ -103,12 +112,17 @@ class EpisodeInline(admin.TabularInline):
 # admin class
 class CourseAdmin(ModelAdmin):
 
-    list_display  = ["owner", "course_name_ar", "course_name_en",]
+    list_display  = ["owner", "course_name_ar", "course_name_en", "show_thumbnail_pc", "show_thumbnail_mobile"]
     search_fields = ["course_name_ar", "course_name_en", "course_description_ar", "course_description_en", "owner__username", "owner__email"]
     list_filter   = [
         "owner", 
         "courselevel__course_level_ar", 
         "coursetype__course_type_ar", "coursetype__is_active"]
+
+
+    actions = [
+        duplicate_objects
+        ]
 
 
     inlines = [LevelInline, TypeInline, EpisodeInline]

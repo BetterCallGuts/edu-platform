@@ -1,11 +1,14 @@
 from pathlib import Path
 import os
+from django.contrib.messages import constants as messages
+
+
 
 # SECURTY AND DEBUG
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-(hr%r^=#=%+ij*uk6y_-w4pf4njzbxb0z9g)r47gyq8xvf-+q='
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # LANGUAGES AND TIME ZONES 
@@ -29,7 +32,7 @@ LOCALE_PATHS = [
 STATIC_URL = 'static/' 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static_dir_1'),
+    os.path.join(BASE_DIR, 'static_dir_1'),#/   \\
 ]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -67,6 +70,7 @@ INSTALLED_APPS = [
     "users",
     "course",
     "custom_admin",
+    "website",
 ]
 
 
@@ -86,7 +90,11 @@ ROOT_URLCONF = 'main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+
+           'templates',
+
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -95,6 +103,10 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n', # for i18n
+
+                # custom
+                "website.context_processors.global_variable"
+
             ],
         },
     },
@@ -127,3 +139,10 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+MESSAGE_TAGS = {
+    messages.DEBUG: 'secondary',     # Bootstrap 5 has 'alert-secondary'
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success',
+    messages.WARNING: 'warning',
+    messages.ERROR: 'danger',        # <- Important! Bootstrap uses 'danger', not 'error'
+}

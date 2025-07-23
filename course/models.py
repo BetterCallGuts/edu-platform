@@ -6,7 +6,7 @@ from django.core.validators import FileExtensionValidator
 import pytz
 import os
 import datetime
-
+from django.utils.html import mark_safe
 
 
 from django.utils import timezone
@@ -23,11 +23,26 @@ class Course(models.Model):
     course_name_en = models.CharField(max_length=100 , verbose_name=_('Course Name en'))
 
 
-    thumbnail = models.ImageField(upload_to='course_images/' , verbose_name=_('Course Thumbnail'))
+    thumbnail_pc     = models.ImageField(upload_to='course_images/' , verbose_name=_('Course Thumbnail'), blank=True, null=True)
+    thumbnail_mobile = models.ImageField(upload_to='course_images/' , verbose_name=_('Course Thumbnail'), blank=True, null=True)
+ 
 
     course_description_ar = models.TextField( verbose_name=_('Course Description ar'))
     course_description_en = models.TextField( verbose_name=_('Course Description en'))
 
+    def show_thumbnail_pc(self):
+        if self.thumbnail_pc:
+            return mark_safe( f"<img src='{self.thumbnail_pc.url}' width='300px' alt='{self.course_name_en}'>")
+        else: return None
+    
+    def show_thumbnail_mobile(self):
+        if self.thumbnail_mobile:
+            return mark_safe( f"<img src='{self.thumbnail_mobile.url}' width='300px'   alt='{self.course_name_en}'>")
+        else: return None
+    
+
+    show_thumbnail_mobile.short_description = _('Thumbnail Mobile')
+    show_thumbnail_pc.short_description = _('Thumbnail PC')
 
 
     def delete(self, *args, **kwargs):

@@ -15,7 +15,27 @@ class User(AbstractUser):
 
     teacher       = models.ManyToManyField(
         'self', 
-        related_name='students', 
-        null=True, blank=True,
+       
+     blank=True,
         verbose_name=_('Teacher')
         )
+    
+
+
+
+class LiveStream(models.Model):
+    PLATFORM_CHOICES = (
+        ('youtube', 'YouTube'),
+        ('twitch', 'Twitch'),
+        ('facebook', 'Facebook'),
+    )
+    platform   = models.CharField(max_length=20, choices=PLATFORM_CHOICES)
+    embed_code = models.TextField()  
+    teacher    = models.ForeignKey(User, related_name="stream", verbose_name=_("teacher"), on_delete=models.CASCADE)
+    is_live    = models.BooleanField(default=False)
+
+# {% for stream in livestreams %}
+#   {% if stream.is_live %}
+#     {{ stream.embed_code|safe }}
+#   {% endif %}
+# {% endfor %}
