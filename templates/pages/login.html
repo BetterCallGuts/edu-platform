@@ -1,0 +1,88 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block base_title %}Login{% endblock %}
+
+{% block content %}
+
+
+
+
+<div class="container d-flex align-items-center justify-content-center my-5" >
+
+
+  <div class="card" style="width: 18rem;">
+    
+    <div class="card-body">
+      {% comment %} form start {% endcomment %}
+      
+      
+      
+      <form method="post" action="{% url 'website:login' %}">
+        {% csrf_token %}
+        <!-- Email input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+          {{form.username.label_tag}}
+          <input type="text" 
+          name="username" autofocus="" 
+          autocapitalize="none"
+          autocomplete="username" 
+          maxlength="150" 
+          required id="id_username"
+          class="form-control"
+          >
+        </div>
+        
+        <!-- Password input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+          {{form.password.label_tag}}
+          <div class="form-password">
+            <input type="password" class="form-control" name="password" placeholder="Enter your password" autocomplete="current-password" required id="id_password">
+            <button type="button" class="form-password-action" data-coreui-toggle="password" aria-label="Toggle password visibility">
+              <span class="form-password-action-icon"></span>
+            </button>
+          </div>
+
+
+          
+  {% comment %} <div class="form-password">
+    <input type="password" class="form-control" id="examplePasswordInput2" placeholder="Enter your password" value="Top secret">
+    <button type="button" class="form-password-action" data-coreui-toggle="password" aria-label="Toggle password visibility">
+      <span class="form-password-action-icon"></span>
+    </button>
+  </div>
+ {% endcomment %}
+
+        </div>
+        
+
+        <!-- Checkbox -->
+        <div class="row mb-4">
+          <div class="col d-flex justify-content-center">
+            <div class="form-check">
+              <input class="form-check-input"
+              name="remember_me"
+              checked
+              type="checkbox" value="on" id="remember_me">
+              <label class="form-check-label" for="remember_me">{% trans "Remember me" %}</label>
+            </div>
+          </div>
+          
+          {% comment %} reset password {% endcomment %}
+          <div class="col">
+            <a href="{% url 'website:forgot_password' %}">{% trans 'Forgot password?' %} </a>
+          </div> 
+        </div>
+        
+        
+        <input  type="submit" value="{% trans 'submit' %}" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4" />
+      </form>
+      
+      
+      
+      {% comment %} end form {% endcomment %}
+    </div>
+  </div>
+</div>
+  
+  {% endblock %}

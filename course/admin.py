@@ -33,7 +33,7 @@ class CourseLevelFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value():
             lang = get_language()
-            field = 'courselevel__course_level_' + lang
+            field = 'course_levels__course_level_' + lang
             return queryset.filter(**{field: self.value()})
         return queryset
 # 
@@ -50,7 +50,7 @@ class CourseTypeFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value():
             lang = get_language()
-            field = 'coursetype__course_type_' + lang
+            field = 'course_types__course_type_' + lang
             return queryset.filter(**{field: self.value()})
         return queryset
 # 
@@ -88,18 +88,20 @@ class ExpiredEpisodesFilter(admin.SimpleListFilter):
 
 # Inlines
 class LevelInline(admin.TabularInline):
-    model = CourseLevel
-    fk_name = 'course'
+    model = CourseLevel.course.through
     extra = 0
     verbose_name = _('Level')
     verbose_name_plural = _('Levels')
 
+   
+
 class TypeInline(admin.TabularInline):
-    model = CourseType
-    fk_name = 'course'
+    model = CourseType.course.through
     extra = 0
     verbose_name = _('Type')
     verbose_name_plural = _('Types')
+
+    
 
 class EpisodeInline(admin.StackedInline):
     model = Episode
@@ -128,9 +130,12 @@ class CourseAdmin(ModelAdmin):
     inlines = [LevelInline, TypeInline, EpisodeInline]
 
 class CourseLevelAdmin(ModelAdmin):
-    list_display = ["course", "owner", "course_level_ar", "course_level_en"]
+    list_display = ["get_courses", "owner", "show_thumbnail","course_level_ar", "course_level_en"]
     search_fields = ["course_level_ar", "course_level_en", "owner__username", "owner__email", "course__course_name_ar"]
     list_filter = ["owner", "course"]
+    def get_courses(self, obj):
+        return ", ".join([course.course_name_ar for course in obj.course.all()])
+    get_courses.short_description = _('Courses')
 
 class CourseTypeAdmin(ModelAdmin):
     list_display = ["course", "owner", "course_type_ar", "course_type_en", "is_active", "created_at", "updated_at"]
@@ -138,7 +143,31 @@ class CourseTypeAdmin(ModelAdmin):
     list_filter = ["is_active", "owner", "course", "created_at", "updated_at"]
     date_hierarchy = "created_at"
 # register
+class EpisodeAdmin(ModelAdmin):
+    list_display = ["course", "owner", "episode_name_ar", "episode_name_en", "is_active", "created_at", "updated_at"]
+    search_fields = ["episode_name_ar", "episode_name_en", "owner__username", "owner__email", "course__course_name_ar"]
+    list_filter = ["is_active", "owner", "course", "created_at", "updated_at"]
+    date_hierarchy = "created_at"
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "students":
+
+            if request.resolver_match.kwargs.get('object_id'):
+                try:
+                    episode_id = request.resolver_match.kwargs['object_id']
+                    episode = Episode.objects.get(id=episode_id)
+                    owner = episode.owner
+                    kwargs["queryset"] = User.objects.filter(role='student', teacher=owner)
+                except Episode.DoesNotExist:
+                    kwargs["queryset"] = User.objects.none()
+            else:
+                
+                kwargs["queryset"] = User.objects.filter(role='student')
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
 admin_site.register(Course, CourseAdmin)
+admin_site.register(CourseLevel, CourseLevelAdmin)
+admin_site.register(Episode, EpisodeAdmin)
 
 
 

@@ -16,7 +16,7 @@ class UserAdmin(BaseUserAdmin):
     list_display = BaseUserAdmin.list_display +   ('role', 'student_limit')
     list_filter = BaseUserAdmin.list_filter +     ('role', 'student_limit')
     # print(BaseUserAdmin.fieldsets,  [None, {'fields': ('role', 'student_limit')}] )
-    fieldsets = list(BaseUserAdmin.fieldsets) +         [("system", {'fields': ('role', 'student_limit')})] 
+    fieldsets = list(BaseUserAdmin.fieldsets) +         [("system", {'fields': ('role', 'student_limit', "teacher")})] 
     search_fields = BaseUserAdmin.search_fields + ('role', 'student_limit')
 
 
@@ -25,7 +25,13 @@ class UserAdmin(BaseUserAdmin):
         if request.user.is_superuser or request.user.role == 'admin':
             return base_fields + ('role', 'student_limit')
         return base_fields
-    
+    def get_fieldsets(self, request, obj = ...):
+        
+        r =  super().get_fieldsets(request, obj)
+
+        if request.user.is_superuser or request.user.role == 'admin':
+            return r
+        return r[0:2]+ r[3:4]
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

@@ -1,0 +1,80 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% load i18n %}
+
+
+{% block extra_header %} 
+<style>
+.card__ {
+    transition: all 0.3s ease-in-out;
+}
+.card:hover img{
+    
+    filter: blur(5px);
+    box-shadow: none;
+}
+.card:hover h5{
+    opacity: 1;
+}
+.card:hover p{
+    opacity: 1;
+}
+
+.card h5,.card p{
+    {% if LANGUAGE_CODE  == 'ar' %}
+    text-align: right;
+    {% elif LANGUAGE_CODE  == 'en' %}
+    text-align: left;
+    {% else %}
+    text-align: left;
+    {% endif %}
+    opacity: .4;
+    transition: .3s ease-in-out;
+    color:black !important;
+
+}
+
+.card p {
+    opacity: 0;
+}
+</style>
+
+
+{% endblock %}
+
+
+{% block base_title %}{% trans 'Levels' %}{% endblock %}
+
+{% block content %}
+
+<div class="container text-center my-5">
+  <div class="row row-cols-1 row-cols-sm-2 g-4 ">
+   
+    {% for ep in episodes %}
+
+    <div class="col">
+       <div class="card text-bg-dark">
+            {% comment %} utilies that we have pc and mobile thumbnails {% endcomment %}
+
+           <video  controls>
+            <source src="{{ ep.video.url }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+
+            <a href="#" style="text-decoration: none;">
+            <div class="">
+                <!-- making the text rtl -->
+                    
+                </div>
+            </a>
+        </div>
+    </div>
+        
+     {% endfor %}
+
+
+     
+  </div>
+</div>
+
+{% endblock %}

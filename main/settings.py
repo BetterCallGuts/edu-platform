@@ -9,7 +9,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-(hr%r^=#=%+ij*uk6y_-w4pf4njzbxb0z9g)r47gyq8xvf-+q='
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.ngrok-free.app",
+]
 
 # LANGUAGES AND TIME ZONES 
 LANGUAGE_CODE = 'en-us'
@@ -42,10 +44,13 @@ MEDIA_URL = '/media/'
 
 # GOLABAL VARS
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-SITE_HEADER      = 'MySite'
-SITE_TITLE       = 'MySite'
-SITE_INDEX_TITLE = 'MySite'
-AUTH_USER_MODEL = 'users.User'
+SITE_HEADER        = 'MySite'
+SITE_TITLE         = 'MySite'
+SITE_INDEX_TITLE   = 'MySite'
+AUTH_USER_MODEL    = 'users.User'
+LOGOUT_REDIRECT_URL= '/'
+LOGIN_REDIRECT_URL = '/'
+
 
 INSTALLED_APPS = [
     # Third Party admin
@@ -71,6 +76,7 @@ INSTALLED_APPS = [
     "course",
     "custom_admin",
     "website",
+    
 ]
 
 

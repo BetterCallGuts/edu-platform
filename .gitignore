@@ -1,6 +1,6 @@
 *.pyc
 media/
-static/
+
 **/static/
 static_dir_1/
 **/migrations/

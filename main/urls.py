@@ -12,5 +12,9 @@ urlpatterns = [
 urlpatterns += i18n_patterns(
     path('admin/', admin_site.urls),
 
+
     path('', include('website.urls')),
+    path("courses/", include("course.urls")),
+    
+
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

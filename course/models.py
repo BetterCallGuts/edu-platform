@@ -7,13 +7,14 @@ import pytz
 import os
 import datetime
 from django.utils.html import mark_safe
-
-
+from django.utils.translation import get_language
+from django.template.defaultfilters import slugify
 from django.utils import timezone
 
 
 
 User = get_user_model()
+
 
 class Course(models.Model):
 
@@ -40,7 +41,12 @@ class Course(models.Model):
             return mark_safe( f"<img src='{self.thumbnail_mobile.url}' width='300px'   alt='{self.course_name_en}'>")
         else: return None
     
-
+    def get_course_language(self):
+        lang = get_language()
+        return self.course_name_ar if lang == 'ar' else self.course_name_en
+    def get_course_description_language(self):
+        lang = get_language()
+        return self.course_description_ar if lang == 'ar' else self.course_description_en
     show_thumbnail_mobile.short_description = _('Thumbnail Mobile')
     show_thumbnail_pc.short_description = _('Thumbnail PC')
 
@@ -60,11 +66,39 @@ class Course(models.Model):
 
 class CourseLevel(models.Model):
 
-    course          = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True , verbose_name=_('Course'))
+    course          = models.ManyToManyField(Course, verbose_name=_('Course'))
     owner           = models.ForeignKey(User, on_delete=models.CASCADE , verbose_name=_('Owner'))
 
+    thumnail        = models.ImageField(upload_to='course_level_images/' , verbose_name=_('Course Level Thumbnail'), blank=True, null=True)
     course_level_ar = models.CharField(max_length=100 , verbose_name=_('Course Level ar'))
     course_level_en = models.CharField(max_length=100 , verbose_name=_('Course Level en'))
+    slug_field      = models.SlugField(max_length=100, unique=True, verbose_name=_('Slug Field'), blank=True, null=True)
+
+
+    is_active       = models.BooleanField(default=True, verbose_name=_('Is Active'))
+
+    def show_thumbnail(self):
+        if self.thumnail:
+            return mark_safe( f"<img src='{self.thumnail.url}' width='300px' alt='{self.course_level_ar}'>")
+        else: return None
+
+    show_thumbnail.short_description = _('Thumbnail')
+
+    def delete(self, *args, **kwargs):
+        r =super().delete(*args, **kwargs)
+        try:
+            os.remove(self.thumnail.path)
+        except:
+            pass
+        return r
+
+    def get_course_level(self):
+        lang = get_language()
+        return self.course_level_ar if lang == 'ar' else self.course_level_en
+
+    def save(self, *args, **kwargs):
+        self.slug_field = slugify(self.course_level_en)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.course_level_ar
@@ -75,7 +109,7 @@ class CourseLevel(models.Model):
 
 
 class CourseType(models.Model):
-    course          = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True , verbose_name=_('Course'))
+    course          = models.ManyToManyField(Course, verbose_name=_('Course'))
     owner           = models.ForeignKey(User, on_delete=models.CASCADE , verbose_name=_('Owner'))
 
     course_type_ar  = models.CharField(max_length=100 , verbose_name=_('Course Type ar'))
@@ -143,7 +177,7 @@ class Episode(models.Model):
      
      episode_description_ar = models.TextField( verbose_name=_('Episode Description ar'))
      episode_description_en = models.TextField( verbose_name=_('Episode Description en'))
-     students               = models.ManyToManyField(User, related_name='student', verbose_name=_('Students'))
+     students               = models.ManyToManyField(User, related_name='student', verbose_name=_('Students'), blank=True)
      video                  = models.FileField(
         upload_to='video/', verbose_name=_('Video'),
         validators=[
