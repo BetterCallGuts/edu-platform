@@ -1,85 +1,223 @@
-{% load i18n %}   
+{% load i18n %}
 
 
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-<div class="container-fluid d-flex align-items-center justify-content-between">
-    <a class="navbar-brand me-3" href="{% url 'website:landing' %}">{{website}}</a>
+<style>
+
+  nav.navbar{
+
+    padding: 0;
+    height:80px;
+    z-index:10;
+  }
 
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  .dropdown-toggle.lang::after{
+    display: none;
+    margin: 0;
+    content: none;
+    border: none;
+    vertical-align: none  ;
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+}
 
-        {% comment %} <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Courses
-          </a>
-          <ul class="dropdown-menu">
 
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
-         {% endcomment %}
-         {% comment %} <li class="nav-item ">
-          <a class="nav-link " href="#">Signup</a>
-          </li> {% endcomment %}
-          <li class="nav-item ">
-            <a class="nav-link {{header_courses}}" href="{% url 'course:levels' %}">Courses</a>
-          </li> 
-          
-          
-          {% if user.is_authenticated %}
-              <li class="nav-item ">
-                  <form method="post" action="{% url 'website:logout' %}">
+  .dropdown-toggle.lang{
 
-                    {% csrf_token %}
-                    <input
-                      class="nav-link " 
-                      type='submit' value="logout" 
-                     />
-                  </form>
+    background-color: #b19b6c40;
+  }
+@media (min-width: 992px) {
+  .myc_r_nav {
+    flex-grow: 0 !important;
+    flex-basis: auto !important;
+    width: auto !important;  /* let it shrink/grow based on content */
+  }
+}
+
+  nav.navbar div a img {
+    width: 57px;
+    height: 60px;
+    border-radius: 0;
+  }
+  nav a {
+    text-wrap: nowrap;
+  }
+
+  .theme-toggle {
+  width: 124px;
+  height: 48px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #f5862c, #f5b932);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+.theme-toggle .theme-icon {
+  background: white;
+  border-radius: 8px;
+  width:72px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+  color: #f5862c;
+  font-size: 16px;
+}
+
+.theme-toggle.dark {
+  background: linear-gradient(90deg, #2b2b2b, #555);
+}
+
+.theme-toggle.dark .theme-icon {
+  transform: translateX(35px); /* slide to the right */
+  color: rgb(26, 15, 104);
+}
+nav a.btn{
+  font-family: 'PlayPenSans';
+  width:224px;
+  height:48;
+  
+  font-size: 16px;
+}
+
+
+
+{% comment %} CHAT GPT STUFF {% endcomment %}
+
+/* Custom collapse breakpoint at 1150px */
+@media (max-width: 1150px) {
+  nav a.btn{
+    width:180px;
+  }
+
+
+}
+
+@media (max-width: 991px) {
+  nav a.btn{
+    width:224px;
+  }
+
+
+}
+
+
+</style>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary position-relative">
+  <div class="container-fluid">
+
+    <!-- LEFT -->
+    <div class="d-flex align-items-center order-1">
+      <div class="theme-toggle" id="themeToggle">
+        <div class="theme-icon">
+          <i class="bi bi-brightness-high"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESKTOP CENTERED LOGO (absolute, only visible lg+) -->
+    <div class="d-none d-lg-block position-absolute top-50 start-50 translate-middle">
+      <a href="{% url 'website:landing' %}">
+        <img src="{{ logo }}" alt="logo" style="width:60px;height:57px;">
+      </a>
+    </div>
+
+    <!-- RIGHT: Toggler & Menu -->
+    <div class="d-flex align-items-center order-3 ms-auto">
+      <!-- Navbar toggler (only small screens) -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbarMenu" aria-controls="navbarMenu"
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+
+    <!-- Collapsible menu -->
+    <div class="collapse navbar-collapse order-4 order-lg-2 justify-content-end" id="navbarMenu">
+      <ul class="navbar-nav d-flex align-items-lg-center gap-2">
+        <!-- Language dropdown -->
+        <li class="nav-item dropdown">
+          <button class="btn btn-secondary dropdown-toggle lang" type="button"
+                  id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-globe"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="langDropdown">
+            {% get_current_language as CURRENT %}
+            {% get_available_languages as LANGS %}
+            {% for code, name in LANGS %}
+              <li>
+                <form id="lang-{{ code }}" action="{% url 'set_language' %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="language" value="{{ code }}">
+                  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                </form>
+                <a class="dropdown-item {% if code == CURRENT %}active{% endif %}"
+                   href="#" onclick="document.getElementById('lang-{{ code }}').submit(); return false;">
+                  {{ name }}
+                </a>
               </li>
-
-          {% else %}
-              <li class="nav-item ">
-                <a class="nav-link {{header_login}} " href="{% url 'website:login' %}">Login</a>
-              </li>
-          {% endif %}
-
-                      <li class="nav-item dropdown">
-                  {% get_current_language as CURRENT %}
-                  <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    {{ CURRENT|upper }}
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
-                    {% get_available_languages as LANGS %}
-                    {% for code, name in LANGS %}
-                    <li>
-                      <form id="lang-{{ code }}" action="{% url 'set_language' %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="language" value="{{ code }}">
-                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
-                      </form>
-                      <a class="dropdown-item {% if code == CURRENT %}active{% endif %}" href="#"
-                        onclick="document.getElementById('lang-{{ code }}').submit(); return false;">
-                        {{ name }}
-                      </a>
-                    </li>
             {% endfor %}
           </ul>
         </li>
- 
 
-      
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <form method="post" action="{% url 'website:logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-outline-secondary">
+                {% trans "Logout" %}
+              </button>
+            </form>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a href="{% url 'website:signup' %}" class="btn btn-primary">
+              {% trans "Create Account" %}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'website:login' %}" class="btn btn-secondary">
+              {% trans "Login" %}
+            </a>
+          </li>
+        {% endif %}
       </ul>
-
     </div>
+
+    <!-- MOBILE LOGO (inline, only visible on small screens) -->
+    <div class="d-flex d-lg-none flex-grow-1 justify-content-center order-2">
+      <a href="{% url 'website:landing' %}">
+        <img src="{{ logo }}" alt="logo" style="width:60px;height:57px;">
+      </a>
+    </div>
+
   </div>
 </nav>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toggle = document.getElementById("themeToggle");
+    const icon = toggle.querySelector(".theme-icon i");
+
+    toggle.addEventListener("click", function () {
+      toggle.classList.toggle("dark");
+
+      if (toggle.classList.contains("dark")) {
+        icon.classList.remove("bi-brightness-high");
+        icon.classList.add("bi-moon");
+        // OPTIONAL: add your dark mode logic here
+        document.body.classList.add("dark-mode");
+      } else {
+        icon.classList.remove("bi-moon");
+        icon.classList.add("bi-brightness-high");
+        // OPTIONAL: remove dark mode logic
+        document.body.classList.remove("dark-mode");
+      }
+    });
+  });
+</script>

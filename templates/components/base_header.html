@@ -1,10 +1,65 @@
 {% load static %}
 <link rel="shortcut icon" href="{% static 'icons/favicon.ico' %}" type="image/x-icon">
-<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" >
 <link href="{% static 'css/coreui.min.css' %}" rel="stylesheet" >
+<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" >
+<link href="{% static 'css/bootstrap_icons.css' %}" rel="stylesheet" >
 <style>
 
 html, body {
     overflow-x: hidden;
 }
+
+.btn-primary {
+    background-color: #B19B6C;
+    color : white;
+    outline: none;
+    border: none;
+    transition: all 0.4s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: white;
+    color : #B19B6C;
+    border: #B19B6C 1px solid;
+}
+
+.btn-secondary {
+    background-color: white;
+    color : #B19B6C;
+    outline: none;
+    border: #B19B6C 1px solid;
+    transition: all 0.4s ease-in-out;
+}
+
+.btn-secondary:hover {
+    background-color: #B19B6C;
+    color : white;
+    border: none;
+}
+
+</style>
+
+
+<!-- FONTS -->
+<style>
+    @font-face {
+        font-family: 'Aref_Ruqaa_regular';
+        src: url( '{% static "fonts/ArefRuqaa-Regular.ttf" %}' ) format('truetype');
+        font-style: normal;
+        font-weight: normal;
+    }
+    @font-face {
+        font-family: 'Aref_Ruqaa_bold';
+        src: url( '{% static "fonts/ArefRuqaa-Bold.ttf" %}' ) format('truetype');
+        font-style: bold;
+        font-weight: bold;
+    }
+
+    @font-face {
+        font-family: 'PlayPenSans';
+        src: url( '{% static "fonts/PlaypenSansArabic-Regular.ttf" %}' ) format('truetype');
+        font-style: normal;
+        font-weight: normal;
+    }
+
 </style>

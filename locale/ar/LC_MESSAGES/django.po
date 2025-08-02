@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-24 01:27+0300\n"
+"POT-Creation-Date: 2025-07-30 20:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-#: .\course\admin.py:24 .\course\models.py:76
+
+#: .\course\admin.py:24 .\course\models.py:107
 msgid "Course Level"
 msgstr ""
 
-#: .\course\admin.py:41 .\course\models.py:103
+#: .\course\admin.py:41 .\course\models.py:134
 msgid "Course Type"
 msgstr ""
 
@@ -42,11 +43,12 @@ msgstr ""
 msgid "Has Expired Episodes"
 msgstr ""
 
-#: .\course\admin.py:94
+#: .\course\admin.py:93
 msgid "Level"
 msgstr ""
 
-#: .\course\admin.py:95
+#: .\course\admin.py:94 .\templates\pages\courses.html:46
+#: .\templates\pages\episodes.html:46 .\templates\pages\levels.html:6
 msgid "Levels"
 msgstr ""
 
@@ -58,16 +60,20 @@ msgstr ""
 msgid "Types"
 msgstr ""
 
-#: .\course\admin.py:108 .\course\models.py:181
+#: .\course\admin.py:110 .\course\models.py:212
 msgid "Episode"
 msgstr ""
 
-#: .\course\admin.py:109 .\course\models.py:182
+#: .\course\admin.py:111 .\course\models.py:213
 msgid "Episodes"
 msgstr ""
 
-#: .\course\models.py:21 .\course\models.py:65 .\course\models.py:82
-#: .\course\models.py:107 .\course\models.py:137
+#: .\course\admin.py:138
+msgid "Courses"
+msgstr ""
+
+#: .\course\models.py:21 .\course\models.py:70 .\course\models.py:113
+#: .\course\models.py:138 .\course\models.py:168
 msgid "Owner"
 msgstr ""
 
@@ -91,104 +97,132 @@ msgstr ""
 msgid "Course Description en"
 msgstr ""
 
-#: .\course\models.py:45
+#: .\course\models.py:50
 msgid "Thumbnail Mobile"
 msgstr ""
 
-#: .\course\models.py:46
+#: .\course\models.py:51
 msgid "Thumbnail PC"
 msgstr ""
 
-#: .\course\models.py:64 .\course\models.py:81 .\course\models.py:136
+#: .\course\models.py:69 .\course\models.py:112 .\course\models.py:167
 msgid "Course"
 msgstr ""
 
-#: .\course\models.py:67
+#: .\course\models.py:72
+msgid "Course Level Thumbnail"
+msgstr ""
+
+#: .\course\models.py:73
 msgid "Course Level ar"
 msgstr ""
 
-#: .\course\models.py:68
+#: .\course\models.py:74
 msgid "Course Level en"
 msgstr ""
 
-#: .\course\models.py:70 .\course\models.py:88 .\course\models.py:142
+#: .\course\models.py:75
+msgid "Slug Field"
+msgstr ""
+
+#: .\course\models.py:78 .\course\models.py:119 .\course\models.py:173
 msgid "Is Active"
 msgstr ""
 
-#: .\course\models.py:77
+#: .\course\models.py:85
+msgid "Thumbnail"
+msgstr ""
+
+#: .\course\models.py:108
 msgid "Course Levels"
 msgstr ""
 
-#: .\course\models.py:84
+#: .\course\models.py:115
 msgid "Course Type ar"
 msgstr ""
 
-#: .\course\models.py:85
+#: .\course\models.py:116
 msgid "Course Type en"
 msgstr ""
 
-#: .\course\models.py:90 .\course\models.py:157
+#: .\course\models.py:121 .\course\models.py:188
 msgid "Created At"
 msgstr ""
 
-#: .\course\models.py:91 .\course\models.py:158
+#: .\course\models.py:122 .\course\models.py:189
 msgid "Updated At"
 msgstr ""
 
-#: .\course\models.py:104
+#: .\course\models.py:135
 msgid "Course Types"
 msgstr ""
 
-#: .\course\models.py:109 .\course\models.py:127
+#: .\course\models.py:140 .\course\models.py:158
 msgid "Course Image"
 msgstr ""
 
-#: .\course\models.py:110
+#: .\course\models.py:141
 msgid "Course Image Alt"
 msgstr ""
 
-#: .\course\models.py:128
+#: .\course\models.py:159
 msgid "Course Images"
 msgstr ""
 
-#: .\course\models.py:139
+#: .\course\models.py:170
 msgid "Episode Name ar"
 msgstr ""
 
-#: .\course\models.py:140
+#: .\course\models.py:171
 msgid "Episode Name en"
 msgstr ""
 
-#: .\course\models.py:147
+#: .\course\models.py:178
 msgid "Episode Description ar"
 msgstr ""
 
-#: .\course\models.py:148
+#: .\course\models.py:179
 msgid "Episode Description en"
 msgstr ""
 
-#: .\course\models.py:149
+#: .\course\models.py:180
 msgid "Students"
 msgstr ""
 
-#: .\course\models.py:151
+#: .\course\models.py:182
 msgid "Video"
 msgstr ""
 
-#: .\course\models.py:160
+#: .\course\models.py:191
 msgid "Start Date"
 msgstr ""
 
-#: .\course\models.py:161
+#: .\course\models.py:192
 msgid "End Date"
 msgstr ""
 
-#: .\course\models.py:164
+#: .\course\models.py:195
 msgid "Expire Date"
 msgstr ""
 
-#: .\course\models.py:166
+#: .\course\models.py:197
 msgid "How many days to expire"
+msgstr ""
+
+#: .\templates\components\navbar.html:144
+msgid "Logout"
+msgstr "تسجيل خروج"
+
+#: .\templates\components\navbar.html:151
+msgid "Create Account"
+msgstr "انشئ حساب"
+
+#: .\templates\components\navbar.html:156
+msgid "Login"
+msgstr "تسجيل الدخول"
+
+#: .\templates\pages\levels.html:19
+msgid "View the Course"
 msgstr ""
 
 #: .\templates\pages\login.html:69
@@ -203,14 +237,30 @@ msgstr "نسيت كلمة المرور؟"
 msgid "submit"
 msgstr "إرسال"
 
-#: .\users\models.py:14
-msgid "Student Limit"
+#: .\users\models.py:9
+msgid "Student"
 msgstr ""
 
-#: .\users\models.py:20
+#: .\users\models.py:10
+msgid "Assistant"
+msgstr ""
+
+#: .\users\models.py:11 .\users\models.py:21
 msgid "Teacher"
 msgstr ""
 
-#: .\users\models.py:34
+#: .\users\models.py:12
+msgid "Admin"
+msgstr ""
+
+#: .\users\models.py:15
+msgid "Student Limit"
+msgstr ""
+
+#: .\users\models.py:35
 msgid "teacher"
+msgstr ""
+
+#: .\website\views.py:19
+msgid "You have been logged out."
 msgstr ""

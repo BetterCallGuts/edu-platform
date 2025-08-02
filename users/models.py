@@ -6,9 +6,10 @@ from django.utils.translation import gettext_lazy as _
 class User(AbstractUser):
 
     ROLE_CHOICES = (
-        ('student', 'Student'),
-        ('teacher', 'Teacher'),
-        ('admin', 'Admin'),
+        ('student', _('Student')),
+        ('assistant', _('Assistant')),
+        ('teacher', _('Teacher')),
+        ('admin', _('Admin')),
     )
     role          = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
     student_limit = models.IntegerField(default=0, null=True , blank=True, verbose_name=_('Student Limit'))

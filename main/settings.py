@@ -146,9 +146,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 MESSAGE_TAGS = {
-    messages.DEBUG: 'secondary',     # Bootstrap 5 has 'alert-secondary'
+    messages.DEBUG: 'secondary',     
     messages.INFO: 'info',
     messages.SUCCESS: 'success',
     messages.WARNING: 'warning',
-    messages.ERROR: 'danger',        # <- Important! Bootstrap uses 'danger', not 'error'
+    messages.ERROR: 'danger',       
 }

@@ -1,23 +1,27 @@
 from django.shortcuts import render
 from django.contrib import messages
 from course.models  import Course, CourseLevel
-from django.contrib.auth.views import LoginView
-from django.views.generic import TemplateView
-from django.contrib.auth import login as auth_login
-from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.views import  LogoutView
+# from django.contrib.auth.views import 
+from django.views.generic      import TemplateView
+from django.contrib.auth       import login as auth_login
+from django.utils.translation  import gettext_lazy as _
+from django.contrib.auth.views import  LogoutView, LoginView
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic.edit import CreateView
+from django.contrib.auth       import get_user_model
+from django.urls               import reverse_lazy
+
+User = get_user_model()
 
 
 class CustomLogoutView(LogoutView):
-
     def post(self, request, *args, **kwargs): 
         messages.add_message(request, messages.INFO, _("You have been logged out."))
         return super().post(request, *args, **kwargs)
 
-
+# 
 class CustomLoginView(LoginView):
     template_name = 'pages/login.html'
-
     def post(self, request, *args, **kwargs):
         # messages.add_message(request, messages.INFO, _("Please enter a correct username and password. Note that both fields are case-sensitive."))
         return super().post(request, *args, **kwargs)
@@ -36,6 +40,11 @@ class CustomLoginView(LoginView):
         context = super().get_context_data(**kwargs)
         context['header_login'] = "active"
         return context
+# 
+class CustomSignupView(CreateView):
+    template_name = 'pages/signup.html'
+    form_class    = UserCreationForm
+    model         = User
 
 
 

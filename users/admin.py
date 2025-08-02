@@ -37,6 +37,7 @@ class UserAdmin(BaseUserAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser or request.user.role == 'admin':
             return qs
+        
         elif request.user.role == 'teacher':
             return qs.filter(teacher=request.user)
         return qs.none()  
