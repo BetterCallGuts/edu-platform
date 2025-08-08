@@ -15,7 +15,7 @@
 .hero {
   color: black;
   padding-top: 40px;
-  min-height: 80vh;
+  min-height: 100%;
   display: flex;
   align-items: center; 
 
@@ -45,12 +45,13 @@
 .underline::after {
   content: "";
   position: absolute;
-  width: 80%;
-  height: 15px;
-  bottom: -10px;
-  left: 50%;
+  width: 357px;
+  height: 21px;
+  bottom: -15px;
+  left: 30%;
   transform: translateX(-50%);
   background: url('{% static "mat/Vector.svg" %}') no-repeat center;
+  filter: opacity(0.5);
   background-size: contain;
 }
 
@@ -58,10 +59,11 @@
 .star_hero::after {
   content: "";
   position: absolute;
-  width: 100%;
-  height: 100%;
-  left: -150px;
-  top: 0;
+  width: 110px;
+  height: 114px;
+  left: 100px;
+  top: 169px;
+  transform: translateX(-100%) translateY(-100%);
   background: url('{% static "mat/h3.svg" %}') no-repeat center;
   background-size: contain;
   z-index: -1;
@@ -69,17 +71,18 @@
 
 /* Typography sizes - smaller for hero */
 .hero h2 {
-  font-size: 2.5rem;
+  font-size: 96px;
   font-weight: bold;
   line-height: 1.3;
 }
 .second_hero {
-  font-size: 1.5rem;
+  font-size: 48px;
   font-weight: bold;
-  line-height: 2rem;
+  /* line-height: 6rem !important; */
 }
+
 .third_hero {
-  font-size: 1rem;
+  font-size: 40px;
 }
 
 /* Lanterns */
@@ -88,31 +91,161 @@
 }
 .lantern {
   position: absolute;
-  top: -20px;
+  /* height: 300px; 
+  width: 100%; */
+  /* top: -20px; */
   z-index: 2;
-  animation: dropDown 1.2s ease-out forwards;
+  left:47%;
+  
 }
 .lantern-1 {
-  left: 48%;
+
   transform: translateX(-80px);
+  height: 400px;
+  width: 68px;
+  animation: dropDown1 1s ease-out forwards;
 }
+
+
 .lantern-2 {
-  left: 52%;
-  transform: translateX(20px);
+  height: 295px;
+  width: 91px;
+  animation: dropDown2 2s ease-out forwards;
+  /* transform: translateX(20px); */
 }
-@keyframes dropDown {
-  0% { transform: translateY(-150px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+
+.btns__hero {
+
+  {% if LANGUAGE_CODE == 'ar' %}
+    font-family: 'PlayPenSans' ;
+
+  {% endif %}
+
+
+}
+
+@media (max-width: 1333px) {
+
+  .star_hero::after{
+    opacity: .1;
+  }
+}
+@media (max-width:1766px) {
+
+  .lantern {
+  position: absolute;
+
+  z-index: 2;
+  left:6.7%;
+  /* top: -50%; */
+
+  
+}
+
+  .lantern-1 {
+
+  transform: translateX(-80px);
+  height: 400px;
+  width: 68px;
+  animation: dropDown1 1s ease-out forwards;
+  
+}
+
+
+.lantern-2 {
+  height: 295px;
+  width: 91px;
+  animation: dropDown2 2s ease-out forwards;
+  /* transform: translateX(20px); */
+}
+
+}
+
+
+@media (max-width: 1225px) {
+  .lantern-1 {
+
+  transform: translateX(-80px) ;
+  height: 400px;
+  width: 68px;
+  animation: dropDown1l 1s ease-out forwards;
+  /* animation: none; */
+  scale: 0.5;
+  
+}
+
+
+.lantern-2 {
+  height: 295px;
+  width: 91px;
+    scale: 0.5;
+
+  animation: dropDown2l 2s ease-out forwards;
+  /* transform: translateX(20px); */
+}
+
+}
+
+@keyframes dropDown1 {
+  0% { transform: translateX(-80px) translateY(-150px); opacity: 0; }
+  100% { transform: translateX(-80px) translateY(0); opacity: 1; }
+}
+@keyframes dropDown2 {
+  0%{
+    opacity: 0;
+  }
+
+  50% { transform:  translateY(-150px); opacity: 0; }
+  100% { transform:  translateY(0); opacity: 1; }
+}
+
+/*  */
+/*  */
+/*  */
+@keyframes dropDown1l {
+  0% { transform: translateX(-80px) translateY(-450px); opacity: 0; }
+  100% { transform: translateX(-80px) translateY(-50%); opacity: 1; }
+}
+
+
+@keyframes dropDown2l {
+  0%{
+    opacity: 0;
+  }
+
+  50% { transform:  translateY(-350px); opacity: 0; }
+  100% { transform:  translateY(-50%); opacity: 1; }
+}
+
+@media (max-width:1026px) {
+  .btns__hero{
+      display:inline-flex;
+  
+  flex-direction: column;
+  gap: 10px;
+  }
 }
 
 /* Responsive adjustments */
-@media (max-width: 992px) {
-  .hero h2 { font-size: 1.8rem; }
-  .second_hero { font-size: 1.1rem; line-height: 1.6rem; }
+
+
+/* Fadding scroll */.reveal-from-right,
+.reveal-from-left {
+  opacity: 0;
+  transform: translateX(50px); /* default right */
+  transition: all 0.6s ease;
+  will-change: transform, opacity;
 }
-@media (max-width: 768px) {
-  .hero h2 { font-size: 1.5rem; }
+
+.reveal-from-left {
+  transform: translateX(-50px); /* default left */
 }
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 </style>
 
 <div class="drops position-relative">
@@ -121,44 +254,569 @@
 </div>
 
 <!-- Hero -->
-<div class="container-fluid hero px-5">
+<div class="text-break hero px-5">
   <div class="row align-items-center justify-content-center">
     <!-- Image -->
     <div class="col-lg-6 text-center">
-      <img src="{% static 'mat/Group 2.svg' %}" alt="طلاب أزهريون" class="img-fluid" style="max-height: 400px;">
+      <img src="{% static 'mat/Group 2.svg' %}" alt="طلاب أزهريون" class="img-fluid reveal-from-left " style="max-height: 814px; max-width: 100%;top: 0;">
     </div>
 
     <!-- Text -->
-    <div class="col-lg-6">
-      <h2>...طالب أزهري<br>طريقك <span class="highlight star_hero">للتفوق الأزهري</span></h2>
+    <div class="col-lg-6" style="position: relative;">
+      <h2 class="star_hero fs-1">
+        ...طالب أزهري<br>طريقك 
+        <span class="highlight ">
+          للتفوق الأزهري
+        </span>
+      </h2>
 
-      <p class="mt-3 second_hero">
-        أول منصة تعليمية تجمع نخبة 
-        
+      <p class="mt-3 second_hero fs-1">
         <span class="underline">
+          أول منصة تعليمية تجمع نخبة 
+        
                     من مدرسين التعليم الأزهري
-
         </span>
         <br>
-        مدعومة <span class="highlight">بالذكاء الاصطناعي.</span>
+        مدعومة <span class="highlight">بالذكاء الاصطناعي</span>
       </p>
 
-      <p class="third_hero">
+      <p class="third_hero fs-4">
         منصة تعليمية متكاملة تضم نخبة من أفضل المدرسين المتخصصين في مناهج التعليم الأزهري العلمي والأدبي.
         وبيدعم الذكاء الاصطناعي لمساعدتك على الفهم والمتابعة. شروحات مبسطة، ملخصات دقيقة، واختبارات تفاعلية...
         وكل ده من منهجك المعتمد! وتقدر تبدأ مجانًا!
       </p>
 
-      <div class="mt-3 btns__hero">
-        <button class="btn btn-primary me-2">ابدأ الآن مجاناً !</button>
-        <button class="btn btn-secondary">شاهد المدرسين</button>
+      <div class="mt-3 btns__hero "  >
+        <button class="btn btn-primary wide__btn reveal-from-right" style="gap: 0.5rem;">
+          <span>
+
+            شاهد المدرسين
+          </span>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+  <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445"/>
+</svg>
+        </button>
+        <button class="btn btn-secondary  wide__btn reveal-from-right" style="transition: 3s;">ابدأ الآن مجاناً !</button>
       </div>
     </div>
   </div>
 </div>
+
+<!-- END HERO -->
+
+
+<!-- DEVIDER -->
+  <div class="container-fluid reveal-from-left" style="margin-top: 80px; margin-bottom: 90px;">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <img src="{% static 'mat/OBJECTS.svg' %}" alt="طلاب أزهريون" class="img-fluid" style="max-height: 124px; max-width: 711;">
+      </div>
+    </div>
+  </div>
+<!-- END DEVIDER -->
+
+
+<!-- SECOND SECTION -->
+<style>
+  .second__section{
+    position: relative;
+    font-family: 'PlayPenSans';
+    margin-bottom: 88px;
+
+  }
+
+  .second__section .arrow{
+    position: absolute;
+  }
+  .second__section .rarrow{
+    right: 0;
+    top: 0;
+    width: 117px;
+    height: 23px;
+    transform: translateX(-100%);
+  }
+  .second__section .larrow{
+    left: 0;
+    bottom: 0;
+    transform: translateX(100%);
+  }
+  .second__section .square{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 365px;
+    transform:translateY(50%);
+    z-index: -31;
+
+  }
+    .second__section .single{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 117px;
+    transform: translateX(100%) translateY(50%);
+
+  }
+
+  .second__section h2{
+    width: 511px;
+    font-size: 64px;
+    white-space: nowrap;
+
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .second__section span{
+    max-width: 1032px;
+    text-align: center;
+    font-size: 36px;
+    
+
+    }
+
+  
+</style>
+
+<section class="second__section py-5">
+
+  <!-- abs -->
+      <img src="{% static 'mat/square.svg' %}" alt="" class="arrow square opacity-sm-25">
+  <!--  -->
+
+  <div class="container pb-3">
+    <!-- Arrows -->
+    <img src="{% static 'mat/arrows left.svg' %}" alt="" class="larrow arrow reveal-from-right">
+    <img src="{% static 'mat/arrow right.svg' %}" alt="" class="rarrow arrow reveal-from-right">
+    
+    <!-- END ARROWS -->
+  <div class=" d-flex flex-row-reverse row align-items-center justify-content-center" style="gap:80px;position:relative;">
+    
+    <h2 style="position: relative; " class="col-12 col-md-6 text-center  fs-1  reveal-from-right">
+      ليه "طالب أزهري"؟
+      <img src="{% static 'mat/arrow.svg' %}" alt="" class="arrow single">
+
+    </h2>
+
+    <span  class="col-12 col-md-6 fs-5 text-center">
+      طالب أزهري" هي أول منصة تعليمية متخصصة تجمع نخبة من مدرسين التعليم الأزهري تحت سقف واحد. سواء كنت في القسم العلمي أو الأدبي، هتلاقي مدرسين محترفين، شرح مبسط، اختبارات بعد كل درس، وكمان دروس مجانية علشان تجرب قبل ما تشترك.
+    </span>
+  </div>
+    
+
+  </div>
+</section>
+
+
+<!-- END SECOND SECTION -->
+
+<!-- START THIRD SECTION -->
+<style>
+  .third__section{
+
+    font-family: 'PlayPenSans';
+    font-weight: 800 ;
+
+    
+  }
+  .third__section h3{
+    font-size: 48px;
+  }
+
+  .third__section p {
+
+  }
+  @media (min-width: 1527px) {
+    .third__section p {
+
+      padding-right: 395px;padding-left:280px   ;
+    }
+  }
+</style>
+<section class="container-fluid third__section">
+
+  <section class=" py-5 ">
+    <h3 class="text-center reveal-from-left"  style="transition: 4s;">
+      نخبة من أفضل المدرسين في التعليم الأزهري
+    </h3>
+    
+  </section>
+  
+  
+  <section>
+    
+
+    <p class="text-center fs-4" >
+      المنصة بتضم
+      <span class="highlight fs-2">
+
+        +8 
+      </span>
+      
+     مدرسين متخصصين في مواد الأزهر الشريف، كل مدرس له صفحة مخصصة بتوضح الصفوف اللي بيدرسها، جدول الدروس، الثيم الخاص بيه، ونبذة عن أسلوبه في الشرح
+     
+    </p>
+  </section>
+  
+</section>
+
+<!-- END THIRD SECTION -->
+
+
+
+
+<!-- SWIPER SECTION -->
+
+<style>
+
+
+
+    swiper-container {
+      width: 100%;
+      height: 400px;
+      padding: 0 30px;
+    }
+
+    swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #444;
+      display: flex;
+      justify-content: center;
+      align-items: center;  
+          width: 560px;
+          height: 400px;
+    }
+
+    swiper-slide img {
+      display: block;
+
+
+      object-fit: cover;
+    }
+
+
+
+    .fourth__section .abs img{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 405px;
+      height: 426px;
+
+      /* transform: translateX(50%); */
+    }
+  </style>
+<section class="fourth__section py-5 position-relative">
+
+      <div class=" abs" >
+        <img src="{% static 'mat/lines_swiper.svg' %}" alt="" >
+        
+      </div>
+      
+      <swiper-container 
+      class="mySwiper"
+      dir="rtl"
+      pagination="true"
+      pagination-clickable="true"
+      slides-per-view="auto"
+
+        autoplay-delay="5000"
+
+      space-between="30"
+      style="padding-bottom: 88px;"
+      >
+            <swiper-slide>Slide 1</swiper-slide>
+            <swiper-slide>Slide 2</swiper-slide>
+            <swiper-slide>Slide 3</swiper-slide>
+            <swiper-slide>Slide 4</swiper-slide>
+            <swiper-slide>Slide 5</swiper-slide>
+            <swiper-slide>Slide 6</swiper-slide>
+            <swiper-slide>Slide 7</swiper-slide>
+            <swiper-slide>Slide 8</swiper-slide>
+            <swiper-slide>Slide 9</swiper-slide>
+      </swiper-container>
+</section>
+
+
+<!-- END SWIPER SECTION -->
+
+<!-- FIFTH SECTION -->
+
+<style>
+  .fifth__section{
+    font-family: 'PlayPenSans';
+    font-weight: 800 ;
+    /* margin: ; */
+    background: url('{% static "mat/Rectangle 7.svg" %}')  no-repeat   center center;
+    background-size: cover;
+    color: #fff;
+  
+  }
+
+  .fifth__section .row > div:nth-child(-n+3) {
+  
+  border-right: 2px solid  #fff;
+
+
+}
+ @media (max-width: 767px) {
+
+  .fifth__section .row > div:nth-child(-n+3) {
+      border-bottom: 2px solid  #fff;
+        border-right: none;
+        padding-top: 20px;
+        padding-bottom: 20px;
+  } 
+ }
+</style>
+
+
+<section 
+style="transition: 4s;"
+class=" fifth__section py-5 container-xxl	reveal-from-left px-3 "  > 
+
+
+  <div class="row">
+
+<!--  -->
+    <div class="col-12 text-center col-md-3">
+      
+        <p class="fs-5"> اختبارات تفاعلية</p>
+        <h3 class="text-center fs-4">
+            بعد كل درس لضمان فهمك الكامل
+        </h3>
+
+    </div>
+
+    <!--  -->
+    <div class="col-12 text-center col-md-3">
+       <p class="fs-5">  عدد الدروس المتاحة</p>
+        <h3 class="text-center fs-4">
+
+          
+          درس مصور
+          
+          + 300 
+
+
+        </h3>
+    </div>
+
+    <!--  -->
+    <div class="col-12 text-center col-md-3">
+       <p class="fs-5">عدد الطلبة المشتركين</p>
+        <h3 class="text-center fs-4">
+
+          طالب أزهري
+
+          + 1500
+
+
+
+        </h3>
+    </div>
+
+    <div class="col-12 text-center col-md-3"  >
+       <p class="fs-5">   
+                 عدد المدرسين                
+</p>
+        <h3 class="text-center fs-4">
+
+          
+          مدرسين 
+          + 8 
+
+
+
+
+        </h3>
+    </div>
+
+  
+
+
+  </div>
+
+
+</section>
+
+
+<!-- END FIFTH SECTION -->
+
+
+<!-- START SIXTH SECTION -->
+
+<style>
+ .sixth__section{
+    font-family: 'PlayPenSans';
+ }
+
+ .sixth__section .row h1{
+  line-height: 4rem;
+ }
+
+ .sixth__section .row p{
+  line-height: 4rem;
+ } 
+</style>
+
+
+
+<section class="sixth__section py-5 container-fluid	 px-3  my-5"  >
+
+  <div class="row">
+    <div class="col-xl-6 col-12 text-end d-flex flex-column gap-3 ">
+      <h1 class="mb-5 reveal-from-left ">
+        
+        أول منصة أزهرية بتستخدم الذكاء الاصطناعي
+        <br>
+        علشان تفهم أكتر
+        
+      </h1>
+
+      <p class="fs-md-1 fs-md-4 px-4"> 
+        مش فاهم جزء في الدرس؟ ولا يهمك
+        
+         من خلال تقنية الذكاء الاصطناعي داخل المنصة، تقدر تسأل 
+
+         عن أي نقطة مش واضحة بعد ما تخلص المحاضرة، وهيتم 
+        
+         شرحها لك بأسلوب مبسط ومباشر... ومن كتاب الوزارة
+  
+         نفسه، مش من الإنترنت
+     
+         
+      </p>
+      </div>
+      <div class="col-6 text-center reveal-from-right" style="transition: 2s;">
+        <img src="{% static 'mat/bot.svg' %}" alt="طلاب أزهريون" class="img-fluid" style="width: 100% ; max-height: 604px;">
+      </div>
+
+
+  </div> 
+
+
+</section>
+<!-- END SIXTH SECTION -->
+
+
+<!-- START SEVENTH SECTION -->
+
+
+<style>
+
+</style>
+
+
+<section class="container seventh__section py-5 position-relative my-5">
+
+  <div class="row">
+
+    <img src="{% static 'mat/Group 24.svg' %}" class="reveal-from-right " style="transition: 2s;">
+  </div>
+
+</section>
+
+<!-- END SEVENTH SECTION -->
+
+
+<!-- START EIGHTH SECTION -->
+
+<style>
+  .eighth__section{
+    font-family: 'PlayPenSans';
+    
+
+  }
+  .eighth__section p{
+    line-height: 4rem;
+  }
+
+  @media (max-width: 767px) {
+  .opacity-sm-25 {
+    opacity: 0.25 !important;
+  }
+}
+
+</style>
+
+<section class="container eighth__section py-5 position-relative my-5">
+  <img src="{% static 'mat/arrow_down.svg' %}" alt="" class="  img-fluid position-absolute opacity-sm-25"  style="right: 0; bottom: 0;z-index: -2; transform: translateY(50%);">
+  <div class="row text-center d-flex flex-column gap-md-5">
+    <h1 class="reveal-from-left ">
+      كورسات لكل صف ومستوى
+    </h1>
+    <p class="fs-md-2 fs-4  ">
+      كل كورس مصمم بمنهجية منظمة، يبدأ من التأسيس ويوصل للتمكن الكامل
+      <br>
+      تقدر تختار الصف الدراسي، القسم (علمي / أدبي)، وتشوف الكورسات المتاحة
+    </p>
+  </div>
+
+</section>
+
+
+<!-- END EIGHTH SECTION -->
+
+
+
+<!-- START NINTH SECTION -->
+
+
+<section>
+  <img src="{% static 'mat/Group 10.svg' %}" alt="" class="img-fluid reveal-from-left " style="width: 95%; ">
+</section>
+<!-- end ninth section -->
+
+
+
+<!-- START TENTH SECTION -->
+
+<style>
+
+</style>
+
+
+
+<section>
+
+</section>
+
+
+<!-- END TENTH SECTION -->
+
+
 {% endblock %}
 
 
 {% block extra_footer %}
 
+<script>
+function handleReveal(entries) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // Element entered viewport (from top or bottom)
+      entry.target.classList.add('reveal-visible');
+    } else {
+      // Element left viewport (from top or bottom) → hide again
+      entry.target.classList.remove('reveal-visible');
+    }
+  });
+}
+
+const observer = new IntersectionObserver(handleReveal, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal-from-right, .reveal-from-left')
+  .forEach(el => observer.observe(el));
+</script>
+
+
+
+
+<script src="{% static 'js/swiper.js' %}"></script>
 {% endblock%}

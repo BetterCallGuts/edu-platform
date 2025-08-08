@@ -15,6 +15,7 @@ html, body {
     outline: none;
     border: none;
     transition: all 0.4s ease-in-out;
+  
 }
 
 .btn-primary:hover {
@@ -29,13 +30,25 @@ html, body {
     outline: none;
     border: #B19B6C 1px solid;
     transition: all 0.4s ease-in-out;
+    
 }
 
 .btn-secondary:hover {
     background-color: #B19B6C;
     color : white;
     border: none;
-}
+    
+    }
+
+    .wide__btn{
+font-family: 'PlayPenSans';
+    width:224px;
+    height:48px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    }
 
 </style>
 
@@ -62,4 +75,63 @@ html, body {
         font-weight: normal;
     }
 
+
+    
+</style>
+
+
+<style>
+
+
+    /* BASE VARS */
+
+    :root {
+  --bs-fs-1: 2.5rem;  /* 40px */
+  --bs-fs-2: 2rem;    /* 32px */
+  --bs-fs-3: 1.75rem; /* 28px */
+  --bs-fs-4: 1.5rem;  /* 24px */
+  --bs-fs-5: 1.25rem; /* 20px */
+  --bs-fs-6: 1rem;    /* 16px */
+}
+
+@media (min-width: 576px) {
+  .fs-sm-1 { font-size: var(--bs-fs-1) !important; }
+  .fs-sm-2 { font-size: var(--bs-fs-2) !important; }
+  .fs-sm-3 { font-size: var(--bs-fs-3) !important; }
+  .fs-sm-4 { font-size: var(--bs-fs-4) !important; }
+  .fs-sm-5 { font-size: var(--bs-fs-5) !important; }
+  .fs-sm-6 { font-size: var(--bs-fs-6) !important; }
+}
+@media (min-width: 768px) {
+  .fs-md-1 { font-size: var(--bs-fs-1) !important; }
+  .fs-md-2 { font-size: var(--bs-fs-2) !important; }
+  .fs-md-3 { font-size: var(--bs-fs-3) !important; }
+  .fs-md-4 { font-size: var(--bs-fs-4) !important; }
+  .fs-md-5 { font-size: var(--bs-fs-5) !important; }
+  .fs-md-6 { font-size: var(--bs-fs-6) !important; }
+}
+@media (min-width: 992px) {
+  .fs-lg-1 { font-size: var(--bs-fs-1) !important; }
+  .fs-lg-2 { font-size: var(--bs-fs-2) !important; }
+  .fs-lg-3 { font-size: var(--bs-fs-3) !important; }
+  .fs-lg-4 { font-size: var(--bs-fs-4) !important; }
+  .fs-lg-5 { font-size: var(--bs-fs-5) !important; }
+  .fs-lg-6 { font-size: var(--bs-fs-6) !important; }
+}
+@media (min-width: 1200px) {
+  .fs-xl-1 { font-size: var(--bs-fs-1) !important; }
+  .fs-xl-2 { font-size: var(--bs-fs-2) !important; }
+  .fs-xl-3 { font-size: var(--bs-fs-3) !important; }
+  .fs-xl-4 { font-size: var(--bs-fs-4) !important; }
+  .fs-xl-5 { font-size: var(--bs-fs-5) !important; }
+  .fs-xl-6 { font-size: var(--bs-fs-6) !important; }
+}
+@media (min-width: 1400px) {
+  .fs-xxl-1 { font-size: var(--bs-fs-1) !important; }
+  .fs-xxl-2 { font-size: var(--bs-fs-2) !important; }
+  .fs-xxl-3 { font-size: var(--bs-fs-3) !important; }
+  .fs-xxl-4 { font-size: var(--bs-fs-4) !important; }
+  .fs-xxl-5 { font-size: var(--bs-fs-5) !important; }
+  .fs-xxl-6 { font-size: var(--bs-fs-6) !important; }
+}
 </style>

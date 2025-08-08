@@ -73,17 +73,9 @@
 }
 
 .theme-toggle.dark .theme-icon {
-  transform: translateX(35px); /* slide to the right */
+  transform: translateX(41px); /* slide to the right */
   color: rgb(26, 15, 104);
 }
-nav a.btn{
-  font-family: 'PlayPenSans';
-  width:224px;
-  height:48;
-  
-  font-size: 16px;
-}
-
 
 
 {% comment %} CHAT GPT STUFF {% endcomment %}
@@ -169,19 +161,19 @@ nav a.btn{
           <li class="nav-item">
             <form method="post" action="{% url 'website:logout' %}">
               {% csrf_token %}
-              <button type="submit" class="btn btn-outline-secondary">
+              <button type="submit" class="btn btn-secondary wide__btn">
                 {% trans "Logout" %}
               </button>
             </form>
           </li>
         {% else %}
           <li class="nav-item">
-            <a href="{% url 'website:signup' %}" class="btn btn-primary">
+            <a href="{% url 'website:signup' %}" class="btn btn-primary wide__btn">
               {% trans "Create Account" %}
             </a>
           </li>
           <li class="nav-item">
-            <a href="{% url 'website:login' %}" class="btn btn-secondary">
+            <a href="{% url 'website:login' %}" class="btn btn-secondary wide__btn">
               {% trans "Login" %}
             </a>
           </li>
