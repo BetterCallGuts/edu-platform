@@ -5,20 +5,66 @@
 
 {% block content %}
 
+<style>
+.card{
+  background-color:var(--theme) ;
+  border: dashed 3px black;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+form{
+  font-family: 'PlayPenSans';
+  z-index: 3;
+  position: relative;
+
+}
+.card .flying{
+  z-index: 2;
+}
+
+.card .flying .first__gray{
+  z-index: -1;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateX(70%)  translateY(-16%);
+}
+
+.card .flying .sec_color{
+  z-index: -1;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  transform: translateX(-70%) translateY(30%);
+}
+
+</style>
+
+<div class="py-5"></div>
+
+<div class=" d-flex align-items-center justify-content-center my-5 py-5"  >
 
 
 
-<div class="container d-flex align-items-center justify-content-center my-5" >
 
-
-  <div class="card" style="width: 18rem;">
+  <div class="card px-2 py-5" style="width:50vw; max-width: 500px; min-width: 320px;">
     
     <div class="card-body">
       {% comment %} form start {% endcomment %}
-      
+      <div class="flying">
+        <img src="{% static 'mat/login_gray.svg' %}" alt="" class="first__gray">
+        <img src="{% static 'mat/login.svg' %}"      alt="" class="sec_color">
+      </div>
       
       
       <form method="post" action="{% url 'website:login' %}">
+        <div class="d-flex align-items-center justify-content-center ">
+            <img src="{{ logo }}" alt="logo" style="width:167px;height:160px; "  />
+        </div>
+
+          <h1 class="text-center py-5 fs-1 fw-bolder text-black">
+            {% trans 'Login' %}
+          </h1>
         {% csrf_token %}
         <!-- Email input -->
         <div data-mdb-input-init class="form-outline mb-4">
@@ -28,6 +74,7 @@
           autocapitalize="none"
           autocomplete="username" 
           maxlength="150" 
+          placeholder="{% trans 'Enter your username' %}"
           required id="id_username"
           class="form-control"
           >
@@ -42,16 +89,6 @@
               <span class="form-password-action-icon"></span>
             </button>
           </div>
-
-
-          
-  {% comment %} <div class="form-password">
-    <input type="password" class="form-control" id="examplePasswordInput2" placeholder="Enter your password" value="Top secret">
-    <button type="button" class="form-password-action" data-coreui-toggle="password" aria-label="Toggle password visibility">
-      <span class="form-password-action-icon"></span>
-    </button>
-  </div>
- {% endcomment %}
 
         </div>
         
@@ -74,8 +111,18 @@
           </div> 
         </div>
         
-        
-        <input  type="submit" value="{% trans 'submit' %}" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4" />
+        <div class="d-flex flex-column align-items-center  justify-content-center">
+
+          <input  type="submit" value="{% trans 'submit' %}" data-mdb-button-init data-mdb-ripple-init class="btn   wide__btn btn-primary btn-block mb-4" />
+          <p>
+
+            {% trans 'لسة مسجلتش معانا؟' %}
+            <a href="{% url 'website:signup' %}" style="color: #B19B6C;">
+              {% trans 'انشئ حساب جديد' %}
+
+            </a>
+          </p>
+        </div>
       </form>
       
       
@@ -85,4 +132,5 @@
   </div>
 </div>
   
+<div class="py-3"></div>
   {% endblock %}

@@ -86,6 +86,7 @@ font-family: 'PlayPenSans';
     /* BASE VARS */
 
     :root {
+  --theme:white;
   --bs-fs-1: 2.5rem;  /* 40px */
   --bs-fs-2: 2rem;    /* 32px */
   --bs-fs-3: 1.75rem; /* 28px */
@@ -134,4 +135,25 @@ font-family: 'PlayPenSans';
   .fs-xxl-5 { font-size: var(--bs-fs-5) !important; }
   .fs-xxl-6 { font-size: var(--bs-fs-6) !important; }
 }
+
+
+
+/* Fadding scroll */.reveal-from-right,
+.reveal-from-left {
+  opacity: 0;
+  transform: translateX(50px); /* default right */
+  transition: all 2s ease;
+  will-change: transform, opacity;
+}
+
+.reveal-from-left {
+  transform: translateX(-50px); /* default left */
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+
 </style>

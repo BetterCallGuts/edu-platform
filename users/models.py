@@ -13,7 +13,7 @@ class User(AbstractUser):
     )
     role          = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
     student_limit = models.IntegerField(default=0, null=True , blank=True, verbose_name=_('Student Limit'))
-
+    phone         = models.CharField(max_length=20, blank=True, verbose_name=_('Phone'), null=True)
     teacher       = models.ManyToManyField(
         'self', 
        

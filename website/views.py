@@ -6,7 +6,7 @@ from django.views.generic      import TemplateView
 from django.contrib.auth       import login as auth_login
 from django.utils.translation  import gettext_lazy as _
 from django.contrib.auth.views import  LogoutView, LoginView
-from django.contrib.auth.forms import UserCreationForm
+from .forms import SignUpForm
 from django.views.generic.edit import CreateView
 from django.contrib.auth       import get_user_model
 from django.urls               import reverse_lazy
@@ -43,7 +43,7 @@ class CustomLoginView(LoginView):
 # 
 class CustomSignupView(CreateView):
     template_name = 'pages/signup.html'
-    form_class    = UserCreationForm
+    form_class    = SignUpForm
     model         = User
 
 

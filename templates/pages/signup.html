@@ -1,0 +1,149 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block base_title %}Login{% endblock %}
+
+{% block content %}
+
+<style>
+.card{
+  background-color:var(--theme) ;
+  border: dashed 3px black;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+form{
+  font-family: 'PlayPenSans';
+  z-index: 3;
+  position: relative;
+
+}
+.card .flying{
+  z-index: 2;
+}
+
+.card .flying .first__gray{
+  z-index: -1;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateX(70%)  translateY(-16%);
+}
+
+.card .flying .sec_color{
+  z-index: -1;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  transform: translateX(-70%) translateY(30%);
+}
+
+</style>
+
+<div class="py-5"></div>
+
+<div class=" d-flex align-items-center justify-content-center my-5 py-5"  >
+
+
+
+
+  <div class="card px-2 py-5" style="width:50vw; max-width: 500px; min-width: 320px;">
+    
+    <div class="card-body">
+      {% comment %} form start {% endcomment %}
+      <div class="flying">
+        <img src="{% static 'mat/login_gray.svg' %}" alt="" class="first__gray">
+        <img src="{% static 'mat/login.svg' %}"      alt="" class="sec_color">
+      </div>
+      
+      
+      <form method="post" action="{% url 'website:login' %}">
+        <div class="d-flex align-items-center justify-content-center ">
+            <img src="{{ logo }}" alt="logo" style="width:167px;height:160px; "  />
+        </div>
+
+          <h1 class="text-center py-5 fs-1 fw-bolder text-black">
+            {% trans 'Create account' %}
+          </h1>
+        {% csrf_token %}
+        <!-- Email input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+          {{form.username.label_tag}}
+          <input type="text" 
+          name="username" autofocus="" 
+          autocapitalize="none"
+          autocomplete="username" 
+          maxlength="150" 
+          placeholder="{% trans 'Enter your username' %}"
+          required id="id_username"
+          class="form-control"
+          >
+        </div>
+        
+        <div data-mdb-input-init class="form-outline mb-4">
+          {{form.email}}
+          <input type="email" 
+          name="email" autofocus="" 
+          autocapitalize="none"
+          autocomplete="email" 
+          maxlength="150" 
+          placeholder="{% trans 'Enter your email' %}"
+          required id="id_email"
+          class="form-control"
+          >
+        </div>
+
+        <!-- Password input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+          {{form.password.label_tag}}
+          <div class="form-password">
+            <input type="password" class="form-control" name="password" placeholder="Enter your password" autocomplete="current-password" required id="id_password">
+            <button type="button" class="form-password-action" data-coreui-toggle="password" aria-label="Toggle password visibility">
+              <span class="form-password-action-icon"></span>
+            </button>
+          </div>
+
+        </div>
+        
+
+        <!-- Checkbox -->
+        <div class="row mb-4">
+          <div class="col d-flex justify-content-center">
+            <div class="form-check">
+              <input class="form-check-input"
+              name="remember_me"
+              checked
+              type="checkbox" value="on" id="remember_me">
+              <label class="form-check-label" for="remember_me">{% trans "Remember me" %}</label>
+            </div>
+          </div>
+          {{form}}
+          {% comment %} reset password {% endcomment %}
+          {% comment %} <div class="col">
+            <a href="{% url 'website:forgot_password' %}">{% trans 'Forgot password?' %} </a>
+          </div>  {% endcomment %}
+        </div>
+        
+        <div class="d-flex flex-column align-items-center  justify-content-center">
+
+          <input  type="submit" value="{% trans 'submit' %}" data-mdb-button-init data-mdb-ripple-init class="btn   wide__btn btn-primary btn-block mb-4" />
+          <p>
+
+            {% trans 'لسة مسجلتش معانا؟' %}
+            <a href="{% url 'website:signup' %}" style="color: #B19B6C;">
+              {% trans 'انشئ حساب جديد' %}
+
+            </a>
+          </p>
+        </div>
+      </form>
+      
+      
+      
+      {% comment %} end form {% endcomment %}
+    </div>
+  </div>
+</div>
+  
+<div class="py-3"></div>
+  {% endblock %}

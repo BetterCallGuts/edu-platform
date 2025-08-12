@@ -148,10 +148,12 @@
                   <input type="hidden" name="language" value="{{ code }}">
                   <input type="hidden" name="next" value="{{ request.get_full_path }}">
                 </form>
-                <a class="dropdown-item {% if code == CURRENT %}active{% endif %}"
-                   href="#" onclick="document.getElementById('lang-{{ code }}').submit(); return false;">
+                <button 
+                    type="submit"
+                  class="dropdown-item {% if code == CURRENT %}active{% endif %}"
+                  form="lang-{{ code }}">
                   {{ name }}
-                </a>
+                </button>
               </li>
             {% endfor %}
           </ul>

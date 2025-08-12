@@ -2,3 +2,20 @@
     <script src="{% static 'js/popper.js' %}" ></script>
     <script  src="{% static 'js/bootstrap.js' %}" ></script>
     <script  src="{% static 'js/coreui.bundle.js' %}" ></script>
+    {% comment %} FOR FADING {% endcomment %}
+<script>
+function handleReveal(entries) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('reveal-visible');
+    } else {
+      entry.target.classList.remove('reveal-visible');
+    }
+  });
+}
+const observer = new IntersectionObserver(handleReveal, { threshold: 0.1 });
+document.querySelectorAll('.reveal-from-right, .reveal-from-left')
+  .forEach(el => observer.observe(el));
+</script>
+
+

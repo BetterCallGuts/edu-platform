@@ -16,8 +16,8 @@ class UserAdmin(BaseUserAdmin):
     list_display = BaseUserAdmin.list_display +   ('role', 'student_limit')
     list_filter = BaseUserAdmin.list_filter +     ('role', 'student_limit')
     # print(BaseUserAdmin.fieldsets,  [None, {'fields': ('role', 'student_limit')}] )
-    fieldsets = list(BaseUserAdmin.fieldsets) +         [("system", {'fields': ('role', 'student_limit', "teacher")})] 
-    search_fields = BaseUserAdmin.search_fields + ('role', 'student_limit')
+    fieldsets = list(BaseUserAdmin.fieldsets) +         [("system", {'fields': ('phone','role', 'student_limit', "teacher")})] 
+    search_fields = BaseUserAdmin.search_fields + ('role', 'student_limit', 'phone')
 
 
     def get_list_display(self, request):
