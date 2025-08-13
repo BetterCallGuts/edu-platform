@@ -26,10 +26,20 @@ class Course(models.Model):
 
     thumbnail_pc     = models.ImageField(upload_to='course_images/' , verbose_name=_('Course Thumbnail'), blank=True, null=True)
     thumbnail_mobile = models.ImageField(upload_to='course_images/' , verbose_name=_('Course Thumbnail'), blank=True, null=True)
- 
+    is_active        = models.BooleanField(default=True, verbose_name=_('Is Active'))  
 
-    course_description_ar = models.TextField( verbose_name=_('Course Description ar'))
-    course_description_en = models.TextField( verbose_name=_('Course Description en'))
+    course_description_ar = models.TextField( verbose_name=_('Course Description ar')  )
+    course_description_en = models.TextField( verbose_name=_('Course Description en')  )
+    
+    slug = models.SlugField(max_length=100, unique=True, verbose_name=_('Slug Field'), blank=True, null=True)
+
+        
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(f"{self.course_name_en}-{self.pk}", )
+        super().save(*args, **kwargs)
+
+
 
     def show_thumbnail_pc(self):
         if self.thumbnail_pc:
@@ -96,8 +106,10 @@ class CourseLevel(models.Model):
         lang = get_language()
         return self.course_level_ar if lang == 'ar' else self.course_level_en
 
+    
     def save(self, *args, **kwargs):
-        self.slug_field = slugify(self.course_level_en)
+        if not self.slug_field:
+            self.slug_field = slugify(self.course_level_en)
         super().save(*args, **kwargs)
 
     def __str__(self):

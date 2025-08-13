@@ -11,8 +11,17 @@ User = get_user_model()
 
 
 
-# Actions
-@admin.action(description="Duplicate selected items")
+
+
+def refresh_objects(modeladmin, request, queryset):
+    for obj in queryset:
+        obj.save()  
+    modeladmin.message_user(request, f"{queryset.count()} objects refreshed successfully.")
+
+refresh_objects.short_description = _("Refresh (re-save) selected objects")
+
+
+@admin.action(description=_("Duplicate selected items"))
 def duplicate_objects(modeladmin, request, queryset):
     for obj in queryset:
         obj.pk = None  # Reset the primary key
@@ -123,7 +132,9 @@ class CourseAdmin(ModelAdmin):
 
 
     actions = [
-        duplicate_objects
+        duplicate_objects,
+        refresh_objects,
+
         ]
 
 

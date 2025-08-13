@@ -16,7 +16,7 @@
     let delay = 0;
 
     alerts.forEach((alert, index) => {
-      delay += 10000; // 3 seconds between each
+      delay += 10000;
       setTimeout(() => {
         const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
         bsAlert.close();

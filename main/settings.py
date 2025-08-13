@@ -54,9 +54,9 @@ LOGIN_REDIRECT_URL = '/'
 
 INSTALLED_APPS = [
     # Third Party admin
+
+
     'jazzmin',
-
-
     # Enternal
     'django.contrib.admin',
     'django.contrib.auth',

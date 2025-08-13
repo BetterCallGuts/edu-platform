@@ -21,6 +21,20 @@ class User(AbstractUser):
         verbose_name=_('Teacher')
         )
     
+    first_section  = models.ImageField(upload_to='user_images/', blank=True, null=True, verbose_name=_('First Section'))
+    text_in_picture = models.TextField(blank=True, null=True, verbose_name=_('Text In Picture'))
+    text_below     = models.TextField(blank=True, null=True, verbose_name=_('Text Below'))
+    second_section = models.ImageField(upload_to='user_images/', blank=True, null=True, verbose_name=_('Second Section'))
+    third_section  = models.ImageField(upload_to='user_images/', blank=True, null=True, verbose_name=_('Third Section'))
+    fourth_section = models.ImageField(upload_to='user_images/', blank=True, null=True, verbose_name=_('Fourth Section'))
+    social_background = models.ImageField(upload_to='user_images/', blank=True, null=True, verbose_name=_('Social Background'))
+    instgram_link = models.URLField(blank=True, null=True, verbose_name=_('Instagram Link'))
+    instgram_icon = models.ImageField(upload_to='user_images/', blank=True, null=True, verbose_name=_('Instagram Icon'))
+    facebook_link = models.URLField(blank=True, null=True, verbose_name=_('Facebook Link'))
+    facebook_icon = models.ImageField(upload_to='user_images/', blank=True, null=True, verbose_name=_('Facebook Icon'))
+    youtube_link = models.URLField(blank=True, null=True, verbose_name=_('Youtube Link'))
+    youtube_icon = models.ImageField(upload_to='user_images/', blank=True, null=True, verbose_name=_('Youtube Icon'))
+
 
 
 

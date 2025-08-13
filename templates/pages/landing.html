@@ -55,7 +55,6 @@
   background-size: contain;
 }
 
-/* Star behind text */
 .star_hero::after {
   content: "";
   position: absolute;
@@ -63,13 +62,14 @@
   height: 114px;
   left: 100px;
   top: 169px;
+  
   transform: translateX(-100%) translateY(-100%);
   background: url('{% static "mat/h3.svg" %}') no-repeat center;
   background-size: contain;
-  z-index: -1;
+  z-index: -3;
+  opacity: .2;
 }
 
-/* Typography sizes - smaller for hero */
 .hero h2 {
   font-size: 96px;
   font-weight: bold;
@@ -452,35 +452,41 @@
 
 
 <!-- SWIPER SECTION -->
-
+{% if courses %}
 <style>
 
 
 
     swiper-container {
       width: 100%;
-      height: 400px;
-      padding: 0 30px;
+      height: 500px;
+
     }
 
     swiper-slide {
       text-align: center;
       font-size: 18px;
-      background: #444;
+
       display: flex;
       justify-content: center;
       align-items: center;  
-          width: 560px;
-          height: 400px;
+      width: 500px;
+      height: 100%;
     }
 
     swiper-slide img {
-      display: block;
 
+      width: 100%;
+      height: 100%;
 
-      object-fit: cover;
+      object-fit: cover ;
+      border-radius: 4px;
+      transition: .5s;
+
     }
-
+    swiper-slide img:hover{
+      transform: scale(.9);
+    }
 
 
     .fourth__section .abs img{
@@ -492,6 +498,20 @@
 
       /* transform: translateX(50%); */
     }
+
+@media (max-width: 500px){
+      swiper-container {
+      width: 100%;
+      /* height: 100%; */
+
+    }
+    swiper-slide {
+
+      width: 100%;
+      height: 100%;
+    }
+
+}
   </style>
 <section class="fourth__section py-5 position-relative">
 
@@ -512,19 +532,26 @@
       space-between="30"
       style="padding-bottom: 88px;"
       >
-            <swiper-slide>Slide 1</swiper-slide>
-            <swiper-slide>Slide 2</swiper-slide>
-            <swiper-slide>Slide 3</swiper-slide>
-            <swiper-slide>Slide 4</swiper-slide>
-            <swiper-slide>Slide 5</swiper-slide>
-            <swiper-slide>Slide 6</swiper-slide>
-            <swiper-slide>Slide 7</swiper-slide>
-            <swiper-slide>Slide 8</swiper-slide>
-            <swiper-slide>Slide 9</swiper-slide>
-      </swiper-container>
+
+      {% for course in courses %}
+            <swiper-slide>
+              <a href="{% url 'website:teacher' course.slug  %}">
+                <picture>
+                  <source srcset="{{course.thumbnail_pc.url}}" media="(min-width: 500px)">
+     
+                  <img src="{{course.thumbnail_mobile.url}}" alt="{{course.course_name_en}}" />
+                </picture>
+                
+              </a>
+              </swiper-slide>
+
+
+      {% endfor%}
+
+    </swiper-container>
 </section>
 
-
+{% endif %}
 <!-- END SWIPER SECTION -->
 
 <!-- FIFTH SECTION -->
