@@ -20,6 +20,8 @@ class Course(models.Model):
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE , verbose_name=_('Owner'))
 
+    
+
     course_name_ar = models.CharField(max_length=100 , verbose_name=_('Course Name ar'))
     course_name_en = models.CharField(max_length=100 , verbose_name=_('Course Name en'))
 

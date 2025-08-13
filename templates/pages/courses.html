@@ -8,10 +8,31 @@
 {% block content %}
 <section style="font-family: 'PlayPenSans';">
 
-   
-   <section class="container" >
-    <img src="{{course.thumbnail_pc.url}}" style="border-radius: 10px;" alt="{{ course.course_name_en }}" class="img-fluid">
-   </section>
+<style>
+            .below___::after{
+
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 50px;
+            background: url('{% static "mat/Quote Icon (1).svg" %}') no-repeat center center;
+            background-size: contain;
+            /* transform: translateY(200%); */
+
+        }
+        .below___::before{
+
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50px;
+            height: 50px;
+            background: url('{% static "mat/Quote Icon.svg" %}') no-repeat center center;
+        }
+</style>
 
 
 <section class="container  d-flex flex-row justify-content-around  align-items-center py-3 reveal-from-left">
@@ -90,7 +111,10 @@
     </div>
 </section>
 
-
+   
+   <section class="container" >
+    <img src="{{course.thumbnail_pc.url}}" style="border-radius: 10px;" alt="{{ course.course_name_en }}" class="img-fluid">
+   </section>
 
 <div style="position: relative;" class=" p-5">
     
@@ -116,10 +140,10 @@
 <div style="position: relative;" class="p-1">
     
     
-    <section class="container-fluid  reveal-from-left">
+    <section class="container-fluid d-flex justify-content-end  reveal-from-right">
         
-        <img src="{{ teacher.second_section.url }}" alt="{{ teacher.username }}" class="img-fluid">
-        
+        <img src="{% static 'mat/Group 29.svg' %}" alt="{{ teacher.username}}" class="img-fluid">
+
     </section>
 </div>
 
