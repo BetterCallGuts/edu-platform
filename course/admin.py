@@ -1,5 +1,5 @@
 from custom_admin.admin import admin_site
-from .models import Course, CourseLevel, CourseType, Episode
+from .models import Course, CourseLevel, CourseType, Episode,AboutTheCourse, SubscripedCourse, watchedepisods
 from django.contrib.admin import ModelAdmin
 from django.contrib.auth import get_user_model
 from django.contrib import admin
@@ -103,6 +103,13 @@ class LevelInline(admin.TabularInline):
     verbose_name_plural = _('Levels')
 
    
+class AboutTheCourseInline(admin.TabularInline):
+    model = AboutTheCourse
+    extra = 0
+    verbose_name = _('About The Course')
+    verbose_name_plural = _('About The Courses')
+
+   
 
 class TypeInline(admin.TabularInline):
     model = CourseType.course.through
@@ -130,6 +137,14 @@ class CourseAdmin(ModelAdmin):
         "courselevel__course_level_ar", 
         "coursetype__course_type_ar", "coursetype__is_active"]
 
+    fieldsets = [
+        (None, {
+            'fields': ('owner', 'course_name_ar', 'course_name_en', 'course_description_ar', 'course_description_en', 'slug', 'thumbnail_pc', 'thumbnail_mobile', 'is_active', )
+        }),
+        ("Pages", {
+            'fields': ('info_background', 'title_background')
+        }),
+    ]
 
     actions = [
         duplicate_objects,
@@ -138,7 +153,7 @@ class CourseAdmin(ModelAdmin):
         ]
 
 
-    inlines = [LevelInline, TypeInline, EpisodeInline]
+    inlines = [LevelInline, TypeInline, EpisodeInline, AboutTheCourseInline]
 
 class CourseLevelAdmin(ModelAdmin):
     list_display = ["get_courses", "owner", "show_thumbnail","course_level_ar", "course_level_en"]
@@ -155,10 +170,17 @@ class CourseTypeAdmin(ModelAdmin):
     date_hierarchy = "created_at"
 # register
 class EpisodeAdmin(ModelAdmin):
-    list_display = ["course", "owner", "episode_name_ar", "episode_name_en", "is_active", "created_at", "updated_at"]
+    list_display = ["course",  "episode_name_ar", "episode_name_en", "is_active", "created_at", "updated_at"]
     search_fields = ["episode_name_ar", "episode_name_en", "owner__username", "owner__email", "course__course_name_ar"]
-    list_filter = ["is_active", "owner", "course", "created_at", "updated_at"]
+    list_filter = ["is_active",  "course", "created_at", "updated_at"]
+    
+    actions = [
+        refresh_objects,
+        duplicate_objects,
+    ]
     date_hierarchy = "created_at"
+
+
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "students":
@@ -179,6 +201,9 @@ class EpisodeAdmin(ModelAdmin):
 admin_site.register(Course, CourseAdmin)
 admin_site.register(CourseLevel, CourseLevelAdmin)
 admin_site.register(Episode, EpisodeAdmin)
+admin_site.register(AboutTheCourse)
+admin_site.register(SubscripedCourse)
+admin_site.register(watchedepisods)
 
 
 

@@ -156,23 +156,130 @@
     
     <section class="container-fluid  reveal-from-right">
         
-        <img src="{{ teacher.third_section.url }}" alt="{{ teacher.username }}" class="img-fluid">
+        {% for about in course.about_the_courses.all %}
+     
+            <div class="row d-flex justify-content-end">
+                <div class="col-6 mb-3 text-center"  style="border: 1px dashed black;">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title text-black fs-3">{{ about.get_about_the_course }}</h5>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1"></div>
+            </div>
+        {% endfor %}
         
     </section>
 </div>
 
 
 
-<div style="position: relative;" class="py-2">
-    
-    
-    <section class="container-fluid  reveal-from-left">
-        
-        <img src="{{ teacher.fourth_section.url }}" alt="{{ teacher.username }}" class="img-fluid">
-        
-    </section>
-</div>
 
+<style>
+  .fifth__section{
+    font-family: 'PlayPenSans';
+    font-weight: 800 ;
+    /* margin: ; */
+    {% if course.info_background %}
+    
+    background: url('{{ course.info_background.url }}') no-repeat center center;
+    {% else %}
+    background: url('{% static "mat/Rectangle 7.svg" %}')  no-repeat   center center;
+    {% endif %}
+    background-size: cover;
+    color: #fff;
+  
+  }
+
+  .fifth__section .row > div:nth-child(-n+3) {
+  
+  border-right: 2px solid  #fff;
+
+
+}
+ @media (max-width: 767px) {
+
+  .fifth__section .row > div:nth-child(-n+3) {
+      border-bottom: 2px solid  #fff;
+        border-right: none;
+        padding-top: 20px;
+        padding-bottom: 20px;
+  } 
+ }
+</style>
+
+
+<section 
+style="transition: 4s;"
+class=" fifth__section py-5 container-xxl	reveal-from-left px-3 "  > 
+
+
+  <div class="row">
+
+<!--  -->
+    <div class="col-12 text-center col-md-3">
+      
+        <p class="fs-5"> اختبارات تفاعلية</p>
+        <h3 class="text-center fs-4">
+            بعد كل درس لضمان فهمك الكامل
+        </h3>
+
+    </div>
+
+    <!--  -->
+    <div class="col-12 text-center col-md-3">
+       <p class="fs-5">
+        
+        {%  trans 'مجموع عدد الساعات' %}
+        
+    </p>
+        <h3 class="text-center fs-4">
+
+          {{ch}}
+
+
+        </h3>
+    </div>
+
+    <!--  -->
+    <div class="col-12 text-center col-md-3">
+       <p class="fs-5">
+        {% trans 'عدد الدروس المرفوعة' %}
+    </p>
+        <h3 class="text-center fs-4">
+
+          {{hme}}
+
+
+        </h3>
+    </div>
+
+    <div class="col-12 text-center col-md-3"  >
+       <p class="fs-5">   
+        {% trans 'عدد الطلاب المسجلين' %}
+
+
+</p>
+        <h3 class="text-center fs-4">
+
+          
+          {{hms}}
+            
+
+
+
+        </h3>
+    </div>
+
+  
+
+
+  </div>
+
+
+</section>
 
 
 
@@ -193,6 +300,16 @@
         filter: blur(1px);
         transition: .4s;
     }
+    .courses_section h5{
+        backdrop-filter: blur(6px);
+        width: fit-content;
+        height: fit-content;
+        padding: 10px;
+        border-radius: 10px;
+        border: 2px dashed black;
+        box-shadow: 4px -3px 1px 2px rgba(0, 0, 0, 0.732);
+        /* align-self: center; */
+    }
       .courses_section .card .card-title{
         opacity: 1;
         transition: .4s;
@@ -211,10 +328,10 @@
     <div class="row">
         {% for course in courses %}
             <div class="col-md-4 mb-3 text-center">
-                <a  href='' class="card" >
+                <a  href='{% url "website:course" level_slug course.slug %}' class="card" >
                     <img src="{{ course.thumbnail_pc.url }}" alt="{{ course.course_name_ar }}" class="card-img">    
-                    <div class="card-img-overlay">
-                        <h5 class="card-title text-black fs-3">{{ course.get_course_language }}</h5>
+                    <div class="card-img-overlay d-flex justify-content-center">
+                        <h5 class="card-title text-black fs-2"  >{{ course.get_course_language }}</h5>
                         <!-- <p class="card-text">{{ course.get_course_description_language|truncatechars:50 }}</p> -->
                     </div>
                 </a>
@@ -228,12 +345,15 @@
 </div>
 
 
-
 <!-- Social Background -->
  <style>
     .social__section{
+        {% if teacher.social_background %}
         background: url('{{ teacher.social_background.url }}') no-repeat center center;
-                    background-position: center center;
+        background-position: center center;
+        {% else %}
+        border: 3px  dashed  black;
+        {% endif %}
             /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.226); */
 
             background-size: contain;
@@ -320,6 +440,7 @@
         </div>
     </section>
 </div>
+
 
 
 </section>

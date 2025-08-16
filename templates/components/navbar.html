@@ -183,7 +183,7 @@
       </ul>
     </div>
 
-    <!-- MOBILE LOGO (inline, only visible on small screens) -->
+
     <div class="d-flex d-lg-none flex-grow-1 justify-content-center order-2">
       <a href="{% url 'website:landing' %}">
         <img src="{{ logo }}" alt="logo" style="width:60px;height:57px;">
@@ -214,4 +214,34 @@
       }
     });
   });
+  
+
+
+  
+
+
+</script>
+<script>
+(function () {
+  function getCookie(name) {
+    let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    if (match) return match[2];
+    return null;
+}
+
+  
+  
+  
+  const savedLang = getCookie("django_language");
+  const pathLang = window.location.pathname.split("/")[1]; 
+    
+
+
+
+
+    if (savedLang && savedLang !== pathLang) {
+        const newUrl = window.location.origin + "/" + savedLang + window.location.pathname.substring(3) + window.location.search;
+        window.location.replace(newUrl);
+    }
+})();
 </script>

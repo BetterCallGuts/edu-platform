@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib import messages
-from course.models  import Course, CourseLevel
+from course.models  import Course, CourseLevel, SubscripedCourse, Episode
 # from django.contrib.auth.views import 
 from django.views.generic      import TemplateView
 from django.contrib.auth       import login as auth_login
@@ -10,6 +10,7 @@ from .forms import SignUpForm
 from django.views.generic.edit import CreateView
 from django.contrib.auth       import get_user_model
 from django.urls               import reverse_lazy
+from django.db.models import Sum
 
 User = get_user_model()
 
@@ -105,7 +106,7 @@ class TeacherView(TemplateView):
 
        course = Course.objects.get(slug=slug)
        teacher = course.owner
-       courses = Course.objects.filter(owner=teacher)
+       courses = CourseLevel.objects.filter(owner=teacher)
        
        
        context = {
@@ -117,19 +118,79 @@ class TeacherView(TemplateView):
 
 
 
-class CourseView(TemplateView):
+
+class LevelView(TemplateView):
     template_name = "pages/courses.html"
     def get(self, req, slug):
 
-       course = Course.objects.get(slug=slug)
-       teacher = course.owner
-       courses = Course.objects.filter(owner=teacher)
-       
-       
+       level = CourseLevel.objects.get(slug_field=slug)
+       course = level.course
+       teacher = level.owner
+       courses = level.course.all()
+
+       how_many_ep = 0
+       result = 0
+       duration = 0
+       for i in courses:
+           episodes = i.episodes.all()
+           for j in episodes:
+               duration  += j.duration_hours
+           how_many_ep += episodes.count()
+
+
+       how_many_students = SubscripedCourse.objects.filter(course__in=level.course.all()).count()
+    #    sum_hours         = course.episodes.aggregate(Sum('duration_hours'))
+       course_hours      =  duration
+       course_hours      = course_hours if course_hours else 0
        context = {
            "teacher"  : teacher,
            "course"  : course,
            "courses"  : courses,
+           "hms"      : how_many_students,
+           "hme"      : how_many_ep,
+           'ch'       :int(course_hours  ),
+           "level_slug" : level.slug_field,
 
        }
        return render(req,  self.template_name, context)
+    
+
+
+class CourseView(TemplateView):
+    template_name = "pages/course.html"
+    def get(self, req, level_slug, course_slug):
+        # course = Course.objects.get(slug=slug)
+        level = CourseLevel.objects.get(slug_field=level_slug)
+        course = Course.objects.get(slug=course_slug)
+        epS    = Episode.objects.filter(course=course)
+
+        context = {
+            'course'  : course,
+            'epS'     : epS,
+            'level'   : level,
+            "teacher"  : course.owner,
+        }
+
+
+
+        return render(req,  self.template_name, context)
+
+
+class  EpisodeView(TemplateView):
+    template_name = "pages/ep.html"
+
+    def get(self, req, level_slug, course_slug, ep_slug):
+
+
+        course = Course.objects.get(slug=course_slug)
+        level = CourseLevel.objects.get(slug_field=level_slug)
+        ep = Episode.objects.get(slug=ep_slug)
+        teacher = course.owner
+        context = {
+            'course'  : course,
+            'ep'      : ep,
+            'level'   : level,
+            "teacher"  : course.owner,
+        }
+
+        return render(req,  self.template_name, context)

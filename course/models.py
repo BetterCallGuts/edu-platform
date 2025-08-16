@@ -12,9 +12,12 @@ from django.template.defaultfilters import slugify
 from django.utils import timezone
 
 
+from datetime import timedelta
 
 User = get_user_model()
 
+def default_end_date():
+    return timezone.now().date() + timedelta(days=7)
 
 class Course(models.Model):
 
@@ -35,10 +38,15 @@ class Course(models.Model):
     
     slug = models.SlugField(max_length=100, unique=True, verbose_name=_('Slug Field'), blank=True, null=True)
 
+    # pages
+    info_background  = models.ImageField(upload_to='course_images/' , verbose_name=_('Course Info Background'), blank=True, null=True)
+    title_background = models.ImageField(upload_to='course_images/' , verbose_name=_('Course title in'), blank=True, null=True)
         
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(f"{self.course_name_en}-{self.pk}", )
+        if self.pk is None:
+            super().save(*args, **kwargs)
+
+        self.slug = slugify(f"{self.course_name_en}-{self.pk}", )
         super().save(*args, **kwargs)
 
 
@@ -110,12 +118,14 @@ class CourseLevel(models.Model):
 
     
     def save(self, *args, **kwargs):
-        if not self.slug_field:
-            self.slug_field = slugify(self.course_level_en)
+        if not self.pk:
+            super().save(*args, **kwargs)
+
+        self.slug_field = slugify(self.course_level_en)
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.course_level_ar
+        return f"{self.course_level_ar}" + f"{self.owner.username}"
     
     class Meta:
         verbose_name = _('Course Level')
@@ -179,7 +189,7 @@ class CourseImages(models.Model):
 class Episode(models.Model):
 
      course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True , verbose_name=_('Course'),  related_name='episodes')
-     owner  = models.ForeignKey(User, on_delete=models.CASCADE , verbose_name=_('Owner'))
+    #  owner  = models.ForeignKey(User, on_delete=models.CASCADE , verbose_name=_('Owner'))
 
      episode_name_ar = models.CharField(max_length=100 , verbose_name=_('Episode Name ar'))
      episode_name_en = models.CharField(max_length=100 , verbose_name=_('Episode Name en'))
@@ -191,7 +201,7 @@ class Episode(models.Model):
      
      episode_description_ar = models.TextField( verbose_name=_('Episode Description ar'))
      episode_description_en = models.TextField( verbose_name=_('Episode Description en'))
-     students               = models.ManyToManyField(User, related_name='student', verbose_name=_('Students'), blank=True)
+
      video                  = models.FileField(
         upload_to='video/', verbose_name=_('Video'),
         validators=[
@@ -202,18 +212,30 @@ class Episode(models.Model):
      created_at      = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
      updated_at      = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
 
-     start_date = models.DateField(verbose_name=_('Start Date'))
-     end_date   = models.DateField(verbose_name=_('End Date'))
-
+     start_date = models.DateField(verbose_name=_('Start Date') , default=timezone.now)
+     end_date   = models.DateField(verbose_name=_('End Date') , default=default_end_date)
+     duration_hours = models.FloatField(
+         blank=True, null=True,
+         default=0,
+         verbose_name=_('Duration Hours'),
+         help_text=_('By hours')
+         )  
      expire_date = models.IntegerField(
          verbose_name=_('Expire Date'),
            null=True, blank=True,
             help_text=_('How many days to expire' )
      )
+     slug = models.SlugField(max_length=100, unique=True, verbose_name=_('Slug Field'), blank=True, null=True)
 
      def __str__(self):
-         return self.episode_name_ar
-     
+         return self.get_episode_name()
+     def get_episode_name(self):
+         
+         lang = get_language()
+         return self.episode_name_ar if lang == 'ar' else self.episode_name_en
+     def get_episode_description(self):
+         lang = get_language()
+         return self.episode_description_ar if lang == 'ar' else self.episode_description_en
      def delete(self, *args, **kwargs):
          r =super().delete(*args, **kwargs)
          try:
@@ -221,7 +243,18 @@ class Episode(models.Model):
          except:
              pass    
          return r
+     def save(self, *args, **kwargs):
 
+        if self.pk is None:
+            super().save(*args, **kwargs)   
+        
+        
+        self.slug = slugify(f"{self.course.course_name_en if self.course else ''}-{self.episode_name_en if self.episode_name_en else ''}-{self.pk}", )
+        r = super().save(*args, **kwargs)  
+
+        return r
+
+        
      class Meta:
          verbose_name = _('Episode')
          verbose_name_plural = _('Episodes')
@@ -230,3 +263,54 @@ class Episode(models.Model):
 
 
 
+class AboutTheCourse(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE , verbose_name=_('Course'), related_name='about_the_courses')
+    # owner  = models.ForeignKey(User, on_delete=models.CASCADE , verbose_name=_('Owner'))
+
+    about_the_course_ar = models.TextField( verbose_name=_('About The Course ar'))
+    about_the_course_en = models.TextField( verbose_name=_('About The Course en'))
+
+    created_at      = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
+    updated_at      = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
+
+    def __str__(self):
+        return self.get_about_the_course()
+
+    def get_about_the_course(self):
+        lang = get_language()
+        return self.about_the_course_ar if lang == 'ar' else self.about_the_course_en
+
+    class Meta:
+        verbose_name = _('About The Course')
+        verbose_name_plural = _('About The Courses')
+
+
+
+class SubscripedCourse(models.Model):
+    course          = models.ForeignKey(Course, on_delete=models.CASCADE , verbose_name=_('Course'), related_name='subscriped_courses')
+    user            = models.ForeignKey(User,   on_delete=models.CASCADE , verbose_name=_('Owner'))
+    is_active       = models.BooleanField(default=True, verbose_name=_('Is Active'))
+    created_at      = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
+    updated_at      = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
+
+    def __str__(self):
+        return self.course.get_course_language() 
+    
+
+
+    class Meta:
+        verbose_name = _('Subscriped Course')
+        verbose_name_plural = _('Subscriped Courses')
+
+class watchedepisods(models.Model):
+    episod          = models.ForeignKey(Episode, on_delete=models.CASCADE , verbose_name=_('Course'), related_name='watchedepisodes')
+    user            = models.ForeignKey(User,   on_delete=models.CASCADE , verbose_name=_('Owner'))
+
+    created_at      = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
+    updated_at      = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
+
+    def __str__(self):
+        return self.episod.episode_name_ar if self.episod else self.user.username + "  Watch Ep REport"
+    
+    class Meta:
+        verbose_name = _('Watched Episodes')

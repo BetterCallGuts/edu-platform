@@ -3,6 +3,9 @@ from custom_admin.admin import admin_site
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin, GroupAdmin as BaseGroupAdmin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
+from course.admin import duplicate_objects, refresh_objects
+
+
 
 
 
@@ -13,12 +16,17 @@ User = get_user_model()
 
 class UserAdmin(BaseUserAdmin):
     
-    list_display = BaseUserAdmin.list_display +   ('role', 'student_limit')
+    list_display = BaseUserAdmin.list_display 
     list_filter = BaseUserAdmin.list_filter +     ('role', 'student_limit')
     # print(BaseUserAdmin.fieldsets,  [None, {'fields': ('role', 'student_limit')}] )
-    fieldsets = list(BaseUserAdmin.fieldsets) +         [("system", {'fields': ('phone','role', 'student_limit', "teacher")})] +[("page", {'fields': ('first_section', 'text_in_picture', "text_below", "second_section", "third_section", "fourth_section", "social_background", "instgram_link","instgram_icon", "facebook_link","facebook_icon", "youtube_link", "youtube_icon")})]       
+    fieldsets = list(BaseUserAdmin.fieldsets) +         [("system", {
+        'fields': ('phone','role', 'student_limit', "teacher", "slug")
+ })] +     [("page", {'fields': ('first_section', 'text_in_picture', "text_below", "second_section", "third_section", "fourth_section", "social_background", "instgram_link","instgram_icon", "facebook_link","facebook_icon", "youtube_link", "youtube_icon")})]       
     search_fields = BaseUserAdmin.search_fields + ('role', 'student_limit', 'phone')
-
+    actions = [
+        refresh_objects,
+        duplicate_objects,
+    ]
 
     def get_list_display(self, request):
         base_fields = super().get_list_display(request)

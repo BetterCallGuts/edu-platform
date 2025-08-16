@@ -1,0 +1,81 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block base_title %}
+
+{% endblock %}
+
+{% block content %}
+
+
+<style>
+  {% if LANGUAGE_CODE  == 'ar' %}
+  section{
+    font-family: 'PlayPenSans';
+  }
+
+  {% endif %}
+</style>
+<section 
+{% if LANGUAGE_CODE  == 'ar' %}
+dir="rtl"
+{% else %}
+dir="ltr"
+{% endif %} 
+
+class="container "
+>
+    <a href="{% url 'website:courses' level.slug_field %}">
+      {{ level.get_course_level }}
+    </a>
+    <span class="px-3">
+
+>
+
+    </span>
+    <a href="{% url 'website:course' level.slug_field course.slug %}">
+      {{ course.get_course_language }}
+    </a>
+
+
+    <span class="px-3">
+
+>
+
+    </span>
+    <a href="{% url 'website:ep' level.slug_field course.slug ep.slug %}">
+      {{ ep.get_episode_name }}
+    </a>
+
+
+</section>
+
+
+<h3  class="{% if LANGUAGE_CODE  == 'ar' %}text-end{% else %}text-start{% endif %}  fs-5 p-5 fw-bolder">
+
+  {% trans 'watch the video' %}
+
+</h3>
+
+<div class="container-fluid p-5 " >
+  {% if ep.video %}
+  <video 
+  style="border-radius: 20px; border: 2px dashed black; box-shadow: 10px -10px 1px 1px  rgba(27, 26, 26, 1);"
+  preload="none"
+  {% if course.thumbnail_pc %}
+  poster="{{ course.thumbnail_pc.url }}"
+  {% endif %}
+  controls class="w-100">
+    <source src="{{ ep.video.url }}" type="video/mp4">
+    Your browser does not support the video tag.
+    </video>
+  {% else %}
+   {% trans 'Video not available' %}
+  {% endif %}
+</div>
+
+<section class="container p-5 ">
+
+</section>
+
+  {% endblock %}

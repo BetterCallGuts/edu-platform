@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
+from django.template.defaultfilters import slugify
 
 class User(AbstractUser):
 
@@ -28,6 +28,7 @@ class User(AbstractUser):
     third_section  = models.ImageField(upload_to='user_images/', blank=True, null=True, verbose_name=_('Third Section'))
     fourth_section = models.ImageField(upload_to='user_images/', blank=True, null=True, verbose_name=_('Fourth Section'))
     social_background = models.ImageField(upload_to='user_images/', blank=True, null=True, verbose_name=_('Social Background'))
+
     instgram_link = models.URLField(blank=True, null=True, verbose_name=_('Instagram Link'))
     instgram_icon = models.ImageField(upload_to='user_images/', blank=True, null=True, verbose_name=_('Instagram Icon'))
     facebook_link = models.URLField(blank=True, null=True, verbose_name=_('Facebook Link'))
@@ -35,7 +36,17 @@ class User(AbstractUser):
     youtube_link = models.URLField(blank=True, null=True, verbose_name=_('Youtube Link'))
     youtube_icon = models.ImageField(upload_to='user_images/', blank=True, null=True, verbose_name=_('Youtube Icon'))
 
+    slug = models.SlugField(max_length=100, unique=True, verbose_name=_('Slug Field'), blank=True, null=True)
 
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            super().save(*args, **kwargs)
+        
+        if self.role == 'teacher':
+            self.slug = slugify(f"{self.username}-{self.pk}", )
+
+            super().save(*args, **kwargs)
 
 
 class LiveStream(models.Model):

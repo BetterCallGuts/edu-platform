@@ -1,0 +1,369 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% load i18n %}
+
+
+{% block base_title %}{% trans course.get_course_language %}-{% trans teacher.username %}{% endblock %}
+
+{% block content %}
+<section style="font-family: 'PlayPenSans';">
+
+<style>
+            .below___::after{
+
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 50px;
+            background: url('{% static "mat/Quote Icon (1).svg" %}') no-repeat center center;
+            background-size: contain;
+            /* transform: translateY(200%); */
+
+        }
+        .below___::before{
+
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50px;
+            height: 50px;
+            background: url('{% static "mat/Quote Icon.svg" %}') no-repeat center center;
+        }
+</style>
+
+
+<section class="container  d-flex flex-row justify-content-around  align-items-center py-3 reveal-from-left">
+    
+  
+        <h1>
+            {{ course.get_course_language }}
+        </h1>
+
+
+        <div class="sssss"  >
+            <svg width="200" height="200" viewBox="0 0 36 36" class="circular-chart purple">
+                <path class="circle-bg"
+                d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+                />
+                {% comment %} progress {% endcomment %}
+                <path class="circle"
+                stroke-dasharray="70, 100"  
+                d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+                />
+                <text x="18" y="20.35" class="percentage" text-anchor="middle" alignment-baseline="middle">
+                    {% comment %}  {% endcomment %}
+                    {% trans 'شاهدت' %}
+                    
+                    
+                    70%
+                </text>
+            </svg>
+        </div>
+        
+        <style>
+            .sssss svg{
+                height: 300px;
+            }
+            
+            @media (max-width:500px ){
+                .sssss svg {
+                    height: 100px;
+                }
+            }
+            .circular-chart {
+                display: block;
+                max-width: 100%;
+            }
+            
+            .circle-bg {
+                fill: none;
+                stroke: #eee;
+                stroke-width: 3.8;
+            }
+            
+            .circle {
+                fill: none;
+                stroke-width: 2.8;
+                stroke: #8a2be2;
+                stroke-linecap: round;
+                animation: progress 1s ease-out forwards;
+            }
+            
+            .percentage {
+                font-size: 3px;
+                fill: rgb(0, 0, 0);
+            }
+            
+            @keyframes progress {
+                0% {
+                    stroke-dasharray: 0, 100;
+                }
+            }
+            </style>
+    
+    </div>
+</section>
+
+   {% if course.thumbnail_pc %}
+   <section class="container" >
+    <img src="{{course.thumbnail_pc.url}}" style="
+        border-radius: 10px;
+        border: 2px dashed black;
+        box-shadow: 10px -10px 1px 1px  rgba(27, 26, 26, 1);
+        
+        " alt="{{ course.course_name_en }}" class="img-fluid">
+   </section>
+   {% endif %}
+
+
+
+
+
+
+
+<style>
+    .ggg{
+        width:500px;
+    }
+    @media (max-width:500px){
+        .ggg{
+            width:300px;
+        }
+    }
+</style>
+    
+    
+    <section 
+    
+     style='
+     background: 
+     {% if course.title_background %}
+     url("{{ course.title_background.url }}") 
+     {% else %}
+     url("{% static "mat/Frame 507.png" %}")
+
+     {% endif %}
+     
+     no-repeat center center;
+        background-size: contain;
+        
+        '
+    class="container-fluid d-flex justify-content-center 
+     align-items-center ggg
+    py-5 reveal-from-right">
+        <h1 class="text-center text-white fs-sm-2 fs-md-1 fs-3 p-5" style=' width:fit-content'>
+            {{ course.get_course_language }}
+   
+        </h1>
+
+    </section>
+
+
+<style>
+    .epidS a:hover{
+transform: scale(.97);
+    }
+</style>
+<div class="container p-5 epidS">
+
+    {% for ep in epS %}
+
+    <a class="
+    reveal-from-right
+    row py-3 px-5 text-black" style="border: 1px black solid;border-radius: 10px;box-shadow: 3px -3px 1px 1px rgba(0, 0, 0, 0.805); text-decoration:none; transition: all 2s ease-in-out;" 
+    
+    href="{% url 'website:ep'  level.slug_field  course.slug  ep.slug %}"
+    >
+        <div class="col-md-10 col-12 "  dir="{% if LANGUAGE_CODE  == 'ar' %}rtl{% else %}ltr{% endif %}" style="">
+            <h3 >
+                {{ep.get_episode_name}}
+            </h3 >
+            <p>
+                {{ep.get_episode_description}}
+            </p>    
+        </div>
+        <div class="col-md-2 col-12 d-flex justify-content-center" style="">
+
+
+            
+        <div class="sss"  >
+            <svg width="100" height="100" viewBox="0 0 36 36" class="circular-chart purple">
+                <path class="circle-bg"
+                d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+                />
+                {% comment %} progress {% endcomment %}
+                <path class="circle"
+                stroke-dasharray="70, 100"  
+                d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+                />
+                <text x="18" y="20.35" class="percentage" text-anchor="middle" alignment-baseline="middle">
+                    {% comment %}  {% endcomment %}
+                    {% trans 'شاهدت' %}
+                    
+                    
+                    70%
+                </text>
+            </svg>
+        </div>
+        
+
+
+        </div>
+    </a>
+    {% endfor %}
+</div>
+    
+        <style>
+            .sss svg{
+                height: 100px;
+            }
+            
+
+            .circular-chart {
+                display: block;
+                max-width: 100%;
+            }
+            
+            .circle-bg {
+                fill: none;
+                stroke: #eee;
+                stroke-width: 3.8;
+            }
+            
+            .circle {
+                fill: none;
+                stroke-width: 4;
+                stroke: #8a2be2;
+                stroke-linecap: round;
+                animation: progress 1s ease-out forwards;
+            }
+            
+            .percentage {
+                font-size: 3px;
+                fill: rgb(0, 0, 0);
+            }
+            @media (max-width:700px){
+
+            }
+            @keyframes progress {
+                0% {
+                    stroke-dasharray: 0, 100;
+                }
+            }
+            </style>
+
+<!-- Social Background -->
+ <style>
+    .social__section{
+        {% if teacher.social_background %}
+        background: url('{{ teacher.social_background.url }}') no-repeat center center;
+        background-position: center center;
+        {% else %}
+        border: 3px  dashed  black;
+        box-shadow: 10px -10px 1px 1px rgba(0, 0, 0, 0.711);
+ 
+        {% endif %}
+            /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.226); */
+
+            background-size: contain;
+
+    }
+    .social_media img{
+        width: 100px;
+        height: 100px;
+        transition:.4s;
+        border-radius: 100vmax;
+        box-shadow: 0 0 10px rgba(62, 62, 62, 0.85);
+    }
+    .social_media a{
+        text-decoration: none;
+    }
+
+
+        .social_media img:hover{
+            transform: scale(1.09);
+        }
+
+    @media (max-width:1257px ){
+        
+    .social_media img{
+        width: 80px;
+        height: 100%    }
+
+    
+    }
+
+
+@media (max-width: 1038px) {
+        .social_media img{
+        width: 40px;
+        height: 40px;    }
+
+        .social_media_-section h1{
+            font-size: 20px;
+        }
+}
+
+@media (max-width:523px){
+
+        .social__section{
+            background: none;
+            border: 3px  dashed  black;
+            margin: 40px;
+            box-shadow: 0 0 10px black;
+
+        }
+}
+
+ </style>
+<div style="" class=" container p-5 social__section">
+    
+    
+    <section class="container-fluid social_media_-section  reveal-from-left">
+        <div class="row">
+
+            <div class="social_media col-6  ">
+                {% if teacher.instgram_link and teacher.instgram_icon %}
+                    <a href="{{ teacher.instgram_link }}" target="_blank">
+                        <img src="{{ teacher.instgram_icon.url }}" alt="{{ teacher.username }}" class="img-fluid">
+                    </a>
+                {% endif %}
+                
+                {% if teacher.facebook_link  and teacher.facebook_icon %}
+                    <a href="{{ teacher.facebook_link }}" target="_blank">
+                        <img src="{{ teacher.facebook_icon.url }}" alt="{{ teacher.username }}" class="img-fluid">
+                    </a>
+                {% endif %}
+                
+                {% if teacher.youtube_link and teacher.youtube_icon %}
+                    <a href="{{ teacher.youtube_link }}" target="_blank">
+                        <img src="{{ teacher.youtube_icon.url }}" alt="{{ teacher.username }}" class="img-fluid">
+                    </a>
+                {% endif %}
+            </div>
+            <h1 class="col-6  text-end ">
+                {% trans 'تواصل مع مع مستر' %}
+                <br>
+                {% trans teacher.username %}
+            </h1>
+        </div>
+    </section>
+</div>
+
+
+
+</section>
+    
+
+{% endblock %}
