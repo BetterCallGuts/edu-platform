@@ -1,5 +1,5 @@
 {% load i18n %}
-
+{% load static %}
 
 <style>
 
@@ -105,7 +105,7 @@
 
     <!-- LEFT -->
     <div class="d-flex align-items-center order-1">
-      <div class="theme-toggle" id="themeToggle">
+      <div class="theme-toggle  " id="themeToggle">
         <div class="theme-icon">
           <i class="bi bi-brightness-high"></i>
         </div>
@@ -168,6 +168,33 @@
               </button>
             </form>
           </li>
+          <div class="nav-item d-flex gap-3"  >
+
+            <small class="text-mutant ">
+              {% trans 'Hi ' %}
+              {{user.username}} 
+            </small>
+
+            <div  style="width: 24px; height: 24px; align-self: center;">
+                <style>
+                  .mom{
+                    display: inline-block;
+                    transition: all .4s ease-in-out;
+                  }
+                  .mom:hover{
+                    transform: scale(1.1);
+                  }
+                </style>
+              <a
+              class="mom"
+              href="{% url 'website:profileview' %}">
+                <img src="{% static 'mat/Group.svg' %}"
+                style="width: 100%; height: 100%;"
+                
+                alt="">
+              </a>
+            </div>
+          </div>
         {% else %}
           <li class="nav-item">
             <a href="{% url 'website:signup' %}" class="btn btn-primary wide__btn">

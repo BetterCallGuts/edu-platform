@@ -1,5 +1,5 @@
 from custom_admin.admin import admin_site
-from .models import Course, CourseLevel, CourseType, Episode,AboutTheCourse, SubscripedCourse, watchedepisods
+from .models import Course, CourseLevel, CourseType, Episode,AboutTheCourse, SubscripedCourse, watchedepisods, Summary, QuizQuestion, QuizResult
 from django.contrib.admin import ModelAdmin
 from django.contrib.auth import get_user_model
 from django.contrib import admin
@@ -102,7 +102,23 @@ class LevelInline(admin.TabularInline):
     verbose_name = _('Level')
     verbose_name_plural = _('Levels')
 
-   
+class SummaryInline(admin.TabularInline):
+    model = Summary
+    extra = 0
+    verbose_name = _('Summary')
+    verbose_name_plural = _('Summaries')
+class QuizResultInline(admin.TabularInline):
+    model =  QuizResult
+    extra = 0
+    verbose_name = _('Quiz Result')
+    verbose_name_plural = _('Quiz Results')
+class QuizQuestionInline(admin.TabularInline):
+    model = QuizQuestion
+    extra = 0
+    verbose_name = _('Quiz Question')
+    verbose_name_plural = _('Quiz Questions')
+
+
 class AboutTheCourseInline(admin.TabularInline):
     model = AboutTheCourse
     extra = 0
@@ -179,6 +195,11 @@ class EpisodeAdmin(ModelAdmin):
         duplicate_objects,
     ]
     date_hierarchy = "created_at"
+    inlines = [
+        SummaryInline,
+        QuizQuestionInline,
+        QuizResultInline,
+    ]
 
 
 
@@ -198,12 +219,23 @@ class EpisodeAdmin(ModelAdmin):
                 kwargs["queryset"] = User.objects.filter(role='student')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
+class QuizQuestionModelAdmin(admin.ModelAdmin):
+    actions = [
+        refresh_objects,
+        duplicate_objects,
+    
+    ]
+
+
+
 admin_site.register(Course, CourseAdmin)
 admin_site.register(CourseLevel, CourseLevelAdmin)
 admin_site.register(Episode, EpisodeAdmin)
 admin_site.register(AboutTheCourse)
 admin_site.register(SubscripedCourse)
 admin_site.register(watchedepisods)
-
+admin_site.register(Summary)
+admin_site.register(QuizQuestion,  QuizQuestionModelAdmin)
+admin_site.register(QuizResult)
 
 

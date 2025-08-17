@@ -1,0 +1,192 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block base_title %}Login{% endblock %}
+
+{% block content %}
+
+<style>
+.asd{
+  font-family: 'PlayPenSans';
+  
+}
+
+.asd .flying{
+  z-index: 2;
+}
+
+.asd .flying .first__gray{
+  z-index: -1;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateX(70%)  translateY(-16%);
+}
+
+.asd .flying .sec_color{
+  z-index: -1;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  transform: translateX(-70%) translateY(30%);
+}
+
+</style>
+
+
+
+<div class="asd 
+position-relative
+container  my-5 py-5
+rounded-3
+"  style="background: white;border: 2px dashed black; box-shadow:7px -6px 1px 3px rgba(0, 0, 0, 0.589);">
+
+
+    <div class="row ">
+        <div class="col-xl-10 col-12 
+        p-5 
+        
+        
+        ">
+
+
+      <form
+      
+      {% if LANGUAGE_CODE  == 'ar' %}
+      dir="rtl"
+      {% else %}
+      dir="ltr"
+      {% endif %}
+      
+      method="post" action="">
+
+
+
+        {% csrf_token %}
+
+        
+        <div data-mdb-input-init class="form-outline mb-4">
+          <label for="id_username" class="form-label">
+              {% trans 'username' %}
+          </label>
+          <input type="text" 
+          name="username" autofocus="" 
+          autocapitalize="none"
+          value="{{user.username}}"
+          autocomplete="username" 
+          maxlength="150" 
+          placeholder="{% trans 'Enter your username' %}"
+          required id="id_username"
+          class="form-control"
+          >
+           {% if form.username.errors %}
+            <div class="text-danger">{{ form.username.errors }}</div>
+          {% endif %}
+
+        </div>
+        
+        <div 
+        
+
+        data-mdb-input-init class="form-outline mb-4">
+          
+          <label for="id_email" class="form-label">
+              {% trans 'email' %}
+          </label>
+          <input type="email" 
+        
+          name="email" autofocus="" 
+          value="{{user.email}}"
+          autocapitalize="none"
+          autocomplete="email" 
+          maxlength="150" 
+          placeholder="{% trans 'Enter your email' %}"
+          required id="id_email"
+          class="form-control"
+          >
+          {% if form.email.errors %}
+            <div class="text-danger">{{ form.email.errors }}</div>
+          {% endif %}
+
+        </div>
+
+        <div data-mdb-input-init class="form-outline mb-4">
+          <label
+          class="form-label"
+           for="id_current_password">
+            {% trans 'Current Password' %}
+          </label>
+          <input
+          type="password" 
+          class="form-control"
+          name="current_password" 
+          placeholder="{% trans 'Enter your password' %}" 
+          required
+          id="id_current_password">
+          {% if form.current_password.errors %}
+            <div class="text-danger"> {% trans form.current_password.errors %}</div>
+          {% endif %}
+        </div>
+
+        
+        <div class="d-flex flex-column align-items-center  justify-content-center">
+
+          <input  type="submit" value="{% trans 'submit' %}" data-mdb-button-init data-mdb-ripple-init class="btn   wide__btn btn-primary btn-block mb-4" />
+          <p>
+
+
+            <a href="{% url 'website:reset_password' %}" style="color: #B19B6C;">
+              {% trans 'Change Password' %}
+
+            </a>
+          </p>
+        </div>
+      </form>
+
+        </div>
+        <div class="col-xl-2 col-12  p-3 d-flex justify-content-center align-items-center flex-column">
+            <img src="{% static 'mat/Group.svg' %}" 
+            style="
+            
+            width: 26px;
+            height: 26px;
+            "
+            alt="" class="
+            
+            img-fluid">
+
+            <h3>
+                {{user.username}}
+            </h3>
+            <div>
+                <a 
+                href="{% url 'website:profileview' %}"
+                class="btn btn-primary wide__btn " style="width: 100%;">
+                  <i class="bi bi-gear mx-1"></i>
+                    {% trans 'account settings' %}
+                </a>
+
+
+              <a href="{% url 'website:subscriped_courses'%}" class="btn wide__btn mt-3" style="
+                
+                font-weight: bold;
+                width: 100%;">
+                  <i class="bi bi-journal-text mx-1"></i>
+                    {% trans 'subscribed courses' %}
+              </a>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="flying">
+
+      <img src="{% static 'mat/login_gray.svg' %}" alt="" class="first__gray">
+      <img src="{% static 'mat/login.svg' %}"      alt="" class="sec_color">
+    </div>
+    
+
+</div>
+  
+<div class="py-3"></div>
+  {% endblock %}

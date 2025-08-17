@@ -1,6 +1,8 @@
 {% extends 'components/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load quiz_extras %}
+
 {% block base_title %}
 
 {% endblock %}
@@ -12,70 +14,350 @@
   {% if LANGUAGE_CODE  == 'ar' %}
   section{
     font-family: 'PlayPenSans';
+   
+  }
+  {% endif %}
+  .mo7twa a{
+     color: black;
+     text-decoration: none;
+     display: inline-block;
+     transition: all .4s ease-in-out;
+  }
+  .mo7twa a:hover{
+    transform: scale(1.1);
   }
 
-  {% endif %}
 </style>
-<section 
-{% if LANGUAGE_CODE  == 'ar' %}
-dir="rtl"
-{% else %}
-dir="ltr"
-{% endif %} 
+<div class="mo7twa">
 
-class="container "
->
-    <a href="{% url 'website:courses' level.slug_field %}">
-      {{ level.get_course_level }}
-    </a>
-    <span class="px-3">
-
->
-
-    </span>
-    <a href="{% url 'website:course' level.slug_field course.slug %}">
-      {{ course.get_course_language }}
-    </a>
-
-
-    <span class="px-3">
-
->
-
-    </span>
-    <a href="{% url 'website:ep' level.slug_field course.slug ep.slug %}">
-      {{ ep.get_episode_name }}
-    </a>
-
-
-</section>
-
-
-<h3  class="{% if LANGUAGE_CODE  == 'ar' %}text-end{% else %}text-start{% endif %}  fs-5 p-5 fw-bolder">
-
-  {% trans 'watch the video' %}
-
-</h3>
-
-<div class="container-fluid p-5 " >
-  {% if ep.video %}
-  <video 
-  style="border-radius: 20px; border: 2px dashed black; box-shadow: 10px -10px 1px 1px  rgba(27, 26, 26, 1);"
-  preload="none"
-  {% if course.thumbnail_pc %}
-  poster="{{ course.thumbnail_pc.url }}"
-  {% endif %}
-  controls class="w-100">
-    <source src="{{ ep.video.url }}" type="video/mp4">
-    Your browser does not support the video tag.
-    </video>
+  <section 
+  {% if LANGUAGE_CODE  == 'ar' %}
+  dir="rtl"
   {% else %}
-   {% trans 'Video not available' %}
-  {% endif %}
-</div>
+  dir="ltr"
+  {% endif %} 
+  
+  class="container "
+  >
+  <a href="{% url 'website:courses' level.slug_field %}">
+    {{ level.get_course_level }}
+  </a>
+  <span class="px-3">
+    
+    >
+    
+  </span>
+  <a href="{% url 'website:course' level.slug_field course.slug %}">
+    {{ course.get_course_language }}
+  </a>
+  
+  
+  <span class="px-3">
+    
+    >
+    
+  </span>
+  <a href="{% url 'website:ep' level.slug_field course.slug ep.slug %}">
+    {{ ep.get_episode_name }}
+  </a>
+  
+  
+</section>
 
 <section class="container p-5 ">
+  
+  <h3  class="{% if LANGUAGE_CODE  == 'ar' %}text-end{% else %}text-start{% endif %}  px-3 ">
+    <a 
+    id=""
+    data-bs-toggle="collapse" href="#episodVideo"
+     role="button" aria-expanded="true" aria-controls="episodVideo"
+    href="">
+      
+      {% trans 'watch the video' %}
+      <i class="bi bi-play-btn"></i>
+    </a>
+  </h3>
+  
+  <div class="container-fluid pt-3  collapse  show " id="episodVideo">
+    {% if ep.video %}
+    <video 
+    style="border-radius: 20px; border: 2px dashed black; box-shadow: 10px -10px 1px 1px  rgba(27, 26, 26, 1);"
+    preload="none"
+    {% if course.thumbnail_pc %}
+    poster="{{ course.thumbnail_pc.url }}"
+    {% endif %}
+    controls class="w-100">
+    <source src="{{ ep.video.url }}" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  {% else %}
+  {% trans 'Video not available' %}
+  {% endif %}
+  </div>
+  <h3 class="px-3 py-3 {% if LANGUAGE_CODE  == 'ar' %}text-end{% else %}text-start{% endif %}  ">
+    <a 
+    
+
+    data-bs-toggle="collapse" href="#episodSummaries"
+     role="button" aria-expanded="flase" aria-controls="episodSummaries"
+    href=""
+    >
+      {% trans 'Summaries' %}
+      <i class="bi bi-journal"></i>
+    </a>
+  </h3>
+
+  <div id="episodSummaries" class="collapse container ">
+
+    {% if ep.summaries.all %}
+    <ul class="list-group    py-3" >
+      {% for summary in ep.summaries.all %}
+      {% if request.user_agent.is_mobile %}
+        <a href="{{ summary.file.url }}" target="_blank">Open File</a>
+      {% else %}
+        <iframe src="{{ summary.file.url }}" width="100%" height="600" style="border:none;"></iframe>
+       
+      {% endif %}
+      
+      
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ summary.get_summary }}
+        <a href="{{ summary.file.url }}" target="_blank" class="btn btn-sm btn-primary">
+          {% trans "Download PDF" %}
+        </a>
+      </li>
+      <hr>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <div class="collapse" id="episodSummaries"
+    
+
+    {% if LANGUAGE_CODE  == 'ar' %}
+    dir="rtl"
+    {% else %}
+    dir="ltr"
+    {% endif %}
+
+    >
+
+      <p class="text-muted">{% trans "No summaries available" %}</p>
+    </div>
+    {% endif %}
+  </div>
+
+        <!-- <h3 class="px-5 {% if LANGUAGE_CODE  == 'ar' %}text-end{% else %}text-start{% endif %}  ">
+    <a href="">
+      {% trans 'Training' %}
+      <i class="bi bi-file-earmark"></i>
+    </a>
+  </h3> -->
+  <h3 class="px-3 py-3 {% if LANGUAGE_CODE  == 'ar' %}text-end{% else %}text-start{% endif %}  ">
+    <a 
+
+    data-bs-toggle="collapse" href="#episodquizze"
+     role="button" aria-expanded="false" aria-controls="episodquizze">
+
+      {% trans 'Quizze' %}
+
+      <i class="bi bi-journal-code"></i>
+    </a>
+  </h3>
+  {% if ep.questions.all %}
+  <div 
+  
+    {% if LANGUAGE_CODE  == 'ar' %}
+      dir="rtl"
+    {% else %}
+      dir="ltr"
+    {% endif %}
+  
+
+  class="container-fluid collapse 
+  
+
+  " 
+  
+
+  id="episodquizze">
+  <h2>
+    {% trans 'Quiz' %} - {{course.get_course_language}} - {{ep.get_episode_name}}
+  </h2>
+  <div class="container">
+    <h3>
+      {% trans 'اختبر فهمك – تقييم تفاعلي بعد كل درس!' %}
+    </h3>
+
+    <p class=" text-muted">
+      {% trans 'بعد ما خلصت شرح الدرس، جه وقت التحدي! الاختبار ده معمول علشان يساعدك تعرف مستواك، تقيس مدى فهمك، وتتمرّن على شكل الأسئلة اللي ممكن تيجي في الامتحان، وكل ده في بيئة تفاعلية سهلة وسريعة.' %}
+    </p>
+
+  <h2>
+    {% trans '📌 تعليمات قبل البدء:' %}
+  </h2>
+    <ul>
+      <li>
+        {% trans 'متخرج من الصفحة أثناء الحل' %}
+      </li>
+      <li>
+        {% trans 'بعد الحل راجغ الاجابة بعناية' %}
+      </li>
+     
+    </ul>
+<!-- <hr> -->
+    <div class="border rounded p-3 my-5 d-flex justify-content-between align-items-center">
+
+      <h3>
+        {% trans 'نتيجة الاختبار' %}
+      </h3>
+
+        <div class="sss"  >
+            <svg width="100" height="100" viewBox="0 0 36 36" class="circular-chart purple">
+                <path class="circle-bg"
+                d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+                />
+                {% comment %} progress {% endcomment %}
+                <path class="circle"
+                stroke-dasharray="{{per}}, 100"  
+                d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+                />
+                <text x="18" y="20.35" class="percentage" text-anchor="middle" alignment-baseline="middle">
+                    {% comment %}  {% endcomment %}
+           
+                    
+                    
+                    {{per}} %
+                </text>
+            </svg>
+        </div>
+        
+
+         <style>
+            .sss svg{
+                height: 100px;
+            }
+            
+
+            .circular-chart {
+                display: block;
+                max-width: 100%;
+            }
+            
+            .circle-bg {
+                fill: none;
+                stroke: #eee;
+                stroke-width: 3.8;
+            }
+            
+            .circle {
+                fill: none;
+                stroke-width: 4;
+                stroke: #8a2be2;
+                stroke-linecap: round;
+                animation: progress 1s ease-out forwards;
+            }
+            
+            .percentage {
+                font-size: 3px;
+                fill: rgb(0, 0, 0);
+            }
+            @media (max-width:700px){
+
+            }
+            @keyframes progress {
+                0% {
+                    stroke-dasharray: 0, 100;
+                }
+            }
+            </style>
+
+    </div>
+  </div>
+    <form method="post" >
+      {% csrf_token %}
+{% for question in ep.questions.all %}
+  <div class="rounded border p-3 my-2
+      {% for r in answers %}
+        {% if r.qn == question.pk|stringformat:'s' %}
+          {% if r.ans == r.correct %}
+            bg-success-subtle
+          {% else %}
+            bg-danger-subtle
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+  ">
+
+    <p>{{ forloop.counter }} - {{ question.get_question }}</p>
+
+    {% for opt_num in "1234"|make_list %}
+      {% with opt_text=question|get_option:opt_num %}
+        {% if opt_text %}
+          <div>
+            <input type="radio"
+              name="{{ question.pk }}"
+              value="{{ opt_num }}"
+              id="q{{ question.pk }}_{{ opt_num }}"
+              {% if total %}disabled{% endif %}
+              {% for r in answers %}
+                {% if r.qn == question.pk|stringformat:'s' and r.ans == opt_num %}
+                  checked
+                {% endif %}
+              {% endfor %}
+            >
+            <label for="q{{ question.pk }}_{{ opt_num }}">{{ opt_text }}</label>
+          </div>
+        {% endif %}
+      {% endwith %}
+    {% endfor %}
+
+    {% if total %}
+      {% for r in answers %}
+        {% if r.qn == question.pk|stringformat:'s' %}
+          {% if r.ans == r.correct %}
+            <p class="text-success">Correct Answer</p>
+          {% else %}
+            <p class="text-danger">Wrong Answer</p>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+  </div>
+{% endfor %}
+
+ {% if not  total %}
+
+ <button type="submit" class="btn btn-primary wide__btn">
+        {% trans "Submit" %}
+      </button>
+    </form>
+
+  </div>
+{% endif %}
+  {% else %}
+  <div class="
+  
+  
+  contianer
+  collapse" id="episodquizze"
+  
+      {% if LANGUAGE_CODE  == 'ar' %}
+    dir="rtl"
+    {% else %}
+    dir="ltr"
+    {% endif %}
+  >
+
+    <p class="text-muted">{% trans "No quizzes available Yet" %}</p>
+  </div>
+  {% endif %}
 
 </section>
+</div>
 
-  {% endblock %}
+{% endblock %}

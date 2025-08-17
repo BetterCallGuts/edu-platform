@@ -1,0 +1,153 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block base_title %}Login{% endblock %}
+
+{% block content %}
+
+<style>
+.asd{
+  font-family: 'PlayPenSans';
+  
+}
+
+.asd .flying{
+  z-index: 2;
+}
+
+.asd .flying .first__gray{
+  z-index: -1;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateX(70%)  translateY(-16%);
+}
+
+.asd .flying .sec_color{
+  z-index: -1;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  transform: translateX(-70%) translateY(30%);
+}
+
+</style>
+
+
+
+<div class="asd 
+position-relative
+container  my-5 py-5
+rounded-3
+"  style="background: white;border: 2px dashed black; box-shadow:7px -6px 1px 3px rgba(0, 0, 0, 0.589);">
+
+
+    <div class="row ">
+        <div class="col-xl-10 col-12 
+        p-5 
+        
+        
+        ">
+
+<style>
+     .courses_section .card{
+        transition: transform .5s;
+        border: 1px solid black;
+        box-shadow: 0 0 10px rgba(87, 87, 87, 0.216);
+        /* backdrop-filter: blur(10px); */
+    }
+    .courses_section .card img{
+        filter: blur(1px);
+        transition: .4s;
+    }
+    .courses_section h5{
+        backdrop-filter: blur(6px);
+        width: fit-content;
+        height: fit-content;
+        padding: 10px;
+        border-radius: 10px;
+        border: 2px dashed black;
+        box-shadow: 4px -3px 1px 2px rgba(0, 0, 0, 0.732);
+        /* align-self: center; */
+    }
+      .courses_section .card .card-title{
+        opacity: 1;
+        transition: .4s;
+      }
+    .courses_section .card:hover{
+        transform: scale(1.1);
+    }
+        .courses_section .card:hover img{
+            filter: blur(0px);
+        }
+          .courses_section .card:hover .card-title{
+             opacity: 0;
+          }
+</style>
+<div class="container courses_section py-5">
+    <div class="row">
+        {% for course in subcourses %}
+            <div class="col-md-4 mb-3 text-center">
+                <a  href='{% url "website:courseviewfromprofile" course.course.slug  %}' class="card" >
+                    <img src="{{ course.course.thumbnail_pc.url }}" alt="{{ course.course.course_name_ar }}" class="card-img">    
+                    <div class="card-img-overlay d-flex justify-content-center">
+                        <h5 class="card-title text-black fs-2"  >{{ course.course.get_course_language }}</h5>
+                        <!-- <p class="card-text">{{ course.get_course_description_language|truncatechars:50 }}</p> -->
+                    </div>
+                </a>
+            </div>
+
+            {% if forloop.counter|divisibleby:3 and not forloop.last %}
+                </div><div class="row">
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+
+        </div>
+        <div class="col-xl-2 col-12  p-3 d-flex justify-content-center align-items-center flex-column">
+            <img src="{% static 'mat/Group.svg' %}" 
+            style="
+            
+            width: 26px;
+            height: 26px;
+            "
+            alt="" class="
+            
+            img-fluid">
+
+            <h3>
+                {{user.username}}
+            </h3>
+            <div>
+                <a 
+                href="{% url 'website:profileview' %}"
+                class="btn btn-primary wide__btn " style="width: 100%;">
+                  <i class="bi bi-gear mx-1"></i>
+                    {% trans 'account settings' %}
+                </a>
+
+
+                <a href="{% url 'website:subscriped_courses'%}" class="btn wide__btn mt-3" style="
+                
+                font-weight: bold;
+                width: 100%;">
+                  <i class="bi bi-journal-text mx-1"></i>
+                    {% trans 'subscribed courses' %}
+            </a>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="flying">
+      <img src="{% static 'mat/login_gray.svg' %}" alt="" class="first__gray">
+      <img src="{% static 'mat/login.svg' %}"      alt="" class="sec_color">
+    </div>
+    
+
+</div>
+  
+<div class="py-3"></div>
+  {% endblock %}

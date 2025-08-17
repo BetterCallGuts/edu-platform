@@ -50,7 +50,7 @@ SITE_INDEX_TITLE   = 'MySite'
 AUTH_USER_MODEL    = 'users.User'
 LOGOUT_REDIRECT_URL= '/'
 LOGIN_REDIRECT_URL = '/'
-
+X_FRAME_OPTIONS    = 'SAMEORIGIN'
 
 INSTALLED_APPS = [
     # Third Party admin

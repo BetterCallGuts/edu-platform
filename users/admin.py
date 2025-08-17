@@ -5,8 +5,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from course.admin import duplicate_objects, refresh_objects
 
-
-
+from django.contrib import admin
+from .models import PackageSubscribe, PaymentMethod, LiveStream
 
 
 
@@ -79,6 +79,17 @@ class UserAdmin(BaseUserAdmin):
 class GroupAdmin(BaseGroupAdmin):
     pass
 
+class PackageSubscribeAdmin(admin.ModelAdmin):
+    pass
+
+class PaymentMethodAdmin(admin.ModelAdmin):
+    pass
+
+class LiveStreamAdmin(admin.ModelAdmin):
+    pass
 
 admin_site.register(User, UserAdmin)
 admin_site.register(Group, GroupAdmin)
+admin_site.register(PackageSubscribe, PackageSubscribeAdmin)
+admin_site.register(PaymentMethod , PaymentMethodAdmin)
+admin_site.register(LiveStream , LiveStreamAdmin)

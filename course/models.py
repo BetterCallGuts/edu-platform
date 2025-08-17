@@ -293,11 +293,9 @@ class SubscripedCourse(models.Model):
     created_at      = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
     updated_at      = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
 
+
     def __str__(self):
         return self.course.get_course_language() 
-    
-
-
     class Meta:
         verbose_name = _('Subscriped Course')
         verbose_name_plural = _('Subscriped Courses')
@@ -313,4 +311,96 @@ class watchedepisods(models.Model):
         return self.episod.episode_name_ar if self.episod else self.user.username + "  Watch Ep REport"
     
     class Meta:
-        verbose_name = _('Watched Episodes')
+        verbose_name = _('Watched Episode')
+        verbose_name_plural = _('Watched Episodes')
+
+
+
+
+class Summary(models.Model):
+    episode = models.ForeignKey(Episode, on_delete=models.CASCADE, related_name="summaries", verbose_name=_("Episode"))
+    title_ar = models.CharField(max_length=200, verbose_name=_("Title ar"))
+    title_en = models.CharField(max_length=200, verbose_name=_("Title en"))
+
+    file = models.FileField(
+        upload_to="summaries/",
+        validators=[FileExtensionValidator(allowed_extensions=["pdf"])],
+        verbose_name=_("PDF File")
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def get_summary(self):
+        lang = get_language()
+        return self.title_ar if lang == 'ar' else self.title_en
+
+    def __str__(self):
+        return self.get_summary()
+    class Meta:
+        verbose_name = _("Summary")
+        verbose_name_plural = _("Summaries")
+
+class QuizQuestion(models.Model):
+
+    ch = [
+        ("1", _("First Choice" )),
+        ("2", _("Second Choice")),
+        ("3", _("Third Choice" )),
+        ("4", _("Fourth Choice")),
+    ]
+
+    episode = models.ForeignKey(Episode, on_delete=models.CASCADE, related_name="questions", verbose_name=_("Episode"))
+
+    title_ar = models.CharField(max_length=200, verbose_name=_("Title ar"))
+    title_en = models.CharField(max_length=200, verbose_name=_("Title en"))
+
+    question_1_ar = models.TextField(verbose_name=_("Question 1 ar"))
+    question_1_en = models.TextField(verbose_name=_("Question 1 en"))
+    question_2_ar = models.TextField(verbose_name=_("Question 2 ar"))
+    question_2_en = models.TextField(verbose_name=_("Question 2 en"))
+    question_3_ar = models.TextField(verbose_name=_("Question 3 ar"))
+    question_3_en = models.TextField(verbose_name=_("Question 3 en"))
+    question_4_ar = models.TextField(verbose_name=_("Question 4 ar"))
+    question_4_en = models.TextField(verbose_name=_("Question 4 en"))
+    answer        = models.CharField(max_length=200, verbose_name=_("Answer"), choices=ch)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    def get_question_1(self):
+        lang = get_language()
+        return self.question_1_ar if lang == 'ar'and self.question_1_ar else self.question_1_en
+
+    def get_question_2(self):
+        lang = get_language()
+        return self.question_2_ar if lang == 'ar' and self.question_2_ar else self.question_2_en
+
+    def get_question_3(self):
+        lang = get_language()
+        return self.question_3_ar if lang == 'ar' and self.question_3_ar else self.question_3_en
+
+    def get_question_4(self):
+        lang = get_language()
+        return self.question_4_ar if lang == 'ar' and self.question_4_ar else self.question_4_en
+
+    def get_question(self):
+        lang = get_language()
+        return self.title_ar if lang == 'ar' else self.title_en
+
+    def __str__(self):
+        return self.get_question()
+    class Meta:
+        verbose_name = _("Quiz Question")
+        verbose_name_plural = _("Quiz Questions")
+
+class QuizResult(models.Model):
+    user      = models.ForeignKey(User, on_delete=models.CASCADE, related_name="quiz_results")
+    episode   = models.ForeignKey(Episode, on_delete=models.CASCADE, related_name="results")
+    answers   = models.TextField(verbose_name=_("Answers"), )
+    score     = models.IntegerField(default=0, verbose_name=_("Score"))
+    total     = models.IntegerField(default=0, verbose_name=_("Total Questions"))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = _("Quiz Result")
+        verbose_name_plural = _("Quiz Results")
+
+    def __str__(self):
+        return f"{self.user.username} - {self.episode.get_episode_name()} ({self.score}/{self.total})"

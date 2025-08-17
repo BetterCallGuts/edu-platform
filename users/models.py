@@ -65,3 +65,36 @@ class LiveStream(models.Model):
 #     {{ stream.embed_code|safe }}
 #   {% endif %}
 # {% endfor %}
+
+
+
+class PackageSubscribe(models.Model):
+    packagename = models.CharField(max_length=100, verbose_name=_('Package Name'))
+    user      = models.ManyToManyField(
+        User,
+        related_name="packages")# teachers
+
+    is_active  = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    numbertocontact = models.CharField(default=0         , max_length=255 )
+    backgroumdcolor = models.CharField(default="#FFFFFF", max_length=255)
+
+    def __str__(self):
+        return f"{self.packagename}  "
+
+
+    class Meta:
+        verbose_name = _('Package Subscribe')
+        verbose_name_plural = _('Package Subscribes')
+
+
+class PaymentMethod(models.Model):
+    user      = models.ForeignKey(User, on_delete=models.CASCADE , verbose_name=_('User'))
+    method    = models.CharField(max_length=100, verbose_name=_('Method'))
+    photo     = models.ImageField(upload_to='payment_method_images/', verbose_name=_('Photo'))
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.method} "

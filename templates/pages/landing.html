@@ -246,33 +246,49 @@
     <!-- Text -->
     <div class="col-lg-6" style="position: relative;">
       <h2 class="star_hero fs-1">
-        ...طالب أزهري<br>طريقك 
+
+        {% trans 'طالب أزهري' %}
+
+        
+        <br>
+                {% trans 'طريقك' %}
+
         <span class="highlight ">
-          للتفوق الأزهري
+
+          {% trans 'للتفوق الأزهري' %}
         </span>
       </h2>
 
       <p class="mt-3 second_hero fs-1">
         <span class="underline">
-          أول منصة تعليمية تجمع نخبة 
-        
-                    من مدرسين التعليم الأزهري
+          {% trans 'أول منصة تعليمية تجمع نخبة' %}
+          {% trans 'من مدرسين التعليم الأزهري' %}
         </span>
         <br>
-        مدعومة <span class="highlight">بالذكاء الاصطناعي</span>
+        {% trans 'مدعومة' %}
+
+        <span class="highlight">
+
+          {% trans 'بالذكاء الاصطناعي' %}
+
+
+          
+        </span>
       </p>
 
       <p class="third_hero fs-4">
-        منصة تعليمية متكاملة تضم نخبة من أفضل المدرسين المتخصصين في مناهج التعليم الأزهري العلمي والأدبي.
-        وبيدعم الذكاء الاصطناعي لمساعدتك على الفهم والمتابعة. شروحات مبسطة، ملخصات دقيقة، واختبارات تفاعلية...
-        وكل ده من منهجك المعتمد! وتقدر تبدأ مجانًا!
+        {% trans 'منصة تعليمية متكاملة تضم نخبة من أفضل المدرسين المتخصصين في مناهج التعليم الأزهري العلمي والأدبي.' %}
+        {% trans 'وبيدعم الذكاء الاصطناعي لمساعدتك على الفهم والمتابعة. شروحات مبسطة، ملخصات دقيقة، واختبارات تفاعلية...' %}
+        {% trans 'وكل ده من منهجك المعتمد! وتقدر تبدأ مجانًا!' %}
+        
       </p>
 
       <div class="mt-3 btns__hero "  >
         <a class="btn btn-primary wide__btn reveal-from-right" style="gap: 0.5rem;">
           <span>
 
-            شاهد المدرسين
+
+            {% trans 'شاهد المدرسين' %}
           </span>
         
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
@@ -280,7 +296,13 @@
   <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445"/>
 </svg>
 </a>
-        <a class="btn btn-secondary  wide__btn reveal-from-right" style="transition: 3s;"   >    !  ابدأ الآن مجاناً </a>
+        <a class="btn btn-secondary  wide__btn reveal-from-right" style="transition: 3s;" href="{% url 'website:signup' %}"  >
+
+          {% trans 'ابدأ الآن مجاناً' %}
+
+          
+            
+            </a>
       </div>
     </div>
   </div>
@@ -379,13 +401,14 @@
   <div class=" d-flex flex-row-reverse row align-items-center justify-content-center" style="gap:80px;position:relative;">
     
     <h2 style="position: relative; " class="col-12 col-md-6 text-center  fs-1  reveal-from-right">
-      ليه "طالب أزهري"؟
+      {% trans 'ليه "طالب أزهري"؟' %}
+
       <img src="{% static 'mat/arrow.svg' %}" alt="" class="arrow single">
 
     </h2>
 
     <span  class="col-12 col-md-6 fs-5 text-center">
-      طالب أزهري" هي أول منصة تعليمية متخصصة تجمع نخبة من مدرسين التعليم الأزهري تحت سقف واحد. سواء كنت في القسم العلمي أو الأدبي، هتلاقي مدرسين محترفين، شرح مبسط، اختبارات بعد كل درس، وكمان دروس مجانية علشان تجرب قبل ما تشترك.
+      {% trans 'طالب أزهري" هي أول منصة تعليمية متخصصة تجمع نخبة من مدرسين التعليم الأزهري تحت سقف واحد. سواء كنت في القسم العلمي أو الأدبي، هتلاقي مدرسين محترفين، شرح مبسط، اختبارات بعد كل درس، وكمان دروس مجانية علشان تجرب قبل ما تشترك.' %}
     </span>
   </div>
     
@@ -423,7 +446,7 @@
 
   <section class=" py-5 ">
     <h3 class="text-center reveal-from-left"  style="transition: 4s;">
-      نخبة من أفضل المدرسين في التعليم الأزهري
+      {% trans 'نخبة من أفضل المدرسين في التعليم الأزهري' %}
     </h3>
     
   </section>
@@ -433,13 +456,14 @@
     
 
     <p class="text-center fs-4" >
-      المنصة بتضم
-      <span class="highlight fs-2">
+      {% trans 'المنصة بتضم' %}
 
-        +8 
+      <span class="highlight fs-2">
+        +
+        {{ teachers|length }}
       </span>
       
-     مدرسين متخصصين في مواد الأزهر الشريف، كل مدرس له صفحة مخصصة بتوضح الصفوف اللي بيدرسها، جدول الدروس، الثيم الخاص بيه، ونبذة عن أسلوبه في الشرح
+    {% trans 'مدرسين متخصصين في مواد الأزهر الشريف، كل مدرس له صفحة مخصصة بتوضح الصفوف اللي بيدرسها، جدول الدروس، الثيم الخاص بيه، ونبذة عن أسلوبه في الشرح' %}
      
     </p>
   </section>
@@ -595,22 +619,29 @@ class=" fifth__section py-5 container-xxl	reveal-from-left px-3 "  >
 <!--  -->
     <div class="col-12 text-center col-md-3">
       
-        <p class="fs-5"> اختبارات تفاعلية</p>
+        <p class="fs-5"> 
+          {% trans 'اختبارات تفاعلية' %}
+
+          
+        </p>
         <h3 class="text-center fs-4">
-            بعد كل درس لضمان فهمك الكامل
+            {% trans 'بعد كل درس لضمان فهمك الكامل' %}
         </h3>
 
     </div>
 
     <!--  -->
     <div class="col-12 text-center col-md-3">
-       <p class="fs-5">  عدد الدروس المتاحة</p>
+       <p class="fs-5">
+        {% trans 'عدد الدروس المتاحة' %}
+       </p>
         <h3 class="text-center fs-4">
 
+          {% trans 'درس مصور' %}
+
           
-          درس مصور
-          
-          + 300 
+          +  
+          {{ epS|length }}
 
 
         </h3>
@@ -618,12 +649,14 @@ class=" fifth__section py-5 container-xxl	reveal-from-left px-3 "  >
 
     <!--  -->
     <div class="col-12 text-center col-md-3">
-       <p class="fs-5">عدد الطلبة المشتركين</p>
+       <p class="fs-5">
+        {% trans 'عدد الطلبة المشتركين' %}
+
+        
+       </p>
         <h3 class="text-center fs-4">
-
-          طالب أزهري
-
-          + 1500
+          {% trans 'طالب أزهري' %}
+          + {{ students }}
 
 
 
@@ -632,13 +665,13 @@ class=" fifth__section py-5 container-xxl	reveal-from-left px-3 "  >
 
     <div class="col-12 text-center col-md-3"  >
        <p class="fs-5">   
-                 عدد المدرسين                
-</p>
+                 {% trans 'عدد المدرسين' %}
+
+                </p>
         <h3 class="text-center fs-4">
 
-          
-          مدرسين 
-          + 8 
+          +
+          {{ teachers|length }}
 
 
 
@@ -682,23 +715,18 @@ class=" fifth__section py-5 container-xxl	reveal-from-left px-3 "  >
     <div class="col-xl-6 col-12 text-end d-flex flex-column gap-3 ">
       <h1 class="mb-5 reveal-from-left ">
         
-        أول منصة أزهرية بتستخدم الذكاء الاصطناعي
+        {% trans 'أول منصة أزهرية تدعم الذكاء الاصطناعي' %}
+
         <br>
-        علشان تفهم أكتر
+        {% trans 'علشان تفهم أكتر' %}
         
       </h1>
 
       <p class="fs-md-1 fs-md-4 px-4"> 
-        مش فاهم جزء في الدرس؟ ولا يهمك
-        
-         من خلال تقنية الذكاء الاصطناعي داخل المنصة، تقدر تسأل 
+        {% trans 'مش فاهم جزء في الدرس؟ ولا يهمك' %}
 
-         عن أي نقطة مش واضحة بعد ما تخلص المحاضرة، وهيتم 
         
-         شرحها لك بأسلوب مبسط ومباشر... ومن كتاب الوزارة
-  
-         نفسه، مش من الإنترنت
-     
+        {% trans 'من خلال تقنية الذكاء الاصطناعي داخل المنصة، تقدر تسأل عن أي نقطة مش واضحة بعد ما تخلص المحاضرة، وهيتم شرحها لك بأسلوب مبسط ومباشر... ومن كتاب الوزارة نفسه، مش من الإنترنت' %}
          
       </p>
       </div>
@@ -758,12 +786,13 @@ class=" fifth__section py-5 container-xxl	reveal-from-left px-3 "  >
   <img src="{% static 'mat/arrow_down.svg' %}" alt="" class="  img-fluid position-absolute opacity-sm-25"  style="right: 0; bottom: 0;z-index: -2; transform: translateY(50%);">
   <div class="row text-center d-flex flex-column gap-md-5">
     <h1 class="reveal-from-left ">
-      كورسات لكل صف ومستوى
+      {% trans 'كورسات لكل صف ومستوى' %}
+
     </h1>
     <p class=" fs-sm-6   fs-md-3">
-      كل كورس مصمم بمنهجية منظمة، يبدأ من التأسيس ويوصل للتمكن الكامل
+      {% trans 'كل كورس مصمم بمنهجية منظمة، يبدأ من التأسيس ويوصل للتمكن الكامل' %}
       <br>
-      تقدر تختار الصف الدراسي، القسم (علمي / أدبي)، وتشوف الكورسات المتاحة
+      {% trans 'تقدر تختار الصف الدراسي، القسم (علمي / أدبي)، وتشوف الكورسات المتاحة' %}
     </p>
   </div>
 
@@ -867,16 +896,14 @@ class=" fifth__section py-5 container-xxl	reveal-from-left px-3 "  >
     <div class="row d-flex flex-row-reverse px-5 ">
       <div class="col-12 pt-5 ps-5 col-md-6 text-end d-flex flex-column align-items-center justify-content-center">
         <h1 class="fs-1 py-5 ps-5 reveal-from-right" style="transition: 4s;"> 
-          لو عندك أي سؤال... إحنا معاك
+          {% trans 'لو عندك أي سؤال... إحنا معاك' %}
         </h1>
         <p class="">
-          خدمة دعم فني متاحة يوميًا  *
+          {% trans 'خدمة دعم فني متاحة يوميًا  *' %}
           <br>
-
-          تقدر تتواصل معنا عبر الواتساب أو البريد الإلكتروني    *
+          {% trans 'تقدر تتواصل معنا عبر الواتساب أو البريد الإلكتروني    *' %}
           <br>
-
-          كمان في جروب على التليجرام لكل كورس علشان التواصل يكون أسهل   *
+          {% trans 'كمان في جروب على التليجرام لكل كورس علشان التواصل يكون أسهل   *' %}
         </p>
       </div>
       <div class="col-12 col-md-6 pt-5 text-center ">
@@ -902,19 +929,19 @@ class=" fifth__section py-5 container-xxl	reveal-from-left px-3 "  >
 
     <h1 class="col-12 fs-1   ">
       <span class="reveal-from-left d-block" style="transition: 1s">
-
-        ...
-        مستقبلك الأزهري يبدأ من هنا
+        {% trans 'مستقبلك الأزهري يبدأ من هنا' %}
       </span>
       <br>  
       <span class="reveal-from-left d-block" 
       style="transition: 3s;">
-
-        سجّل الآن وابدأ رحلة التفوق
+        {% trans 'سجّل الآن وابدأ رحلة التفوق' %}
       </span>
     </h1>
     
-    <a class="btn btn-primary  wide__btn reveal-from-right" style="transition: 3s;" > ابدأ الآن مجاناً  </a>
+    <a 
+    
+    href="{% url 'website:signup' %}"
+    class="btn btn-primary  wide__btn reveal-from-right" style="transition: 3s;" > ابدأ الآن مجاناً  </a>
 
   </div>
 </section>
