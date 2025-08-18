@@ -8,10 +8,7 @@ from django.contrib.messages import constants as messages
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-(hr%r^=#=%+ij*uk6y_-w4pf4njzbxb0z9g)r47gyq8xvf-+q='
 DEBUG = True
-ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = [
-    "https://*.ngrok-free.app",
-]
+ALLOWED_HOSTS = ["talebazhari","www.talebazhari.com","talebazhari.com", '72.60.89.229']
 
 # LANGUAGES AND TIME ZONES 
 LANGUAGE_CODE = 'en-us'
