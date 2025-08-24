@@ -1,7 +1,10 @@
 {% load static %}
 {% load i18n %}
 
-<footer class="text-center  text-lg-start bg-body-tertiary text-muted" style="background-color: rgba(0, 0, 0, 0.05);">
+<footer 
+
+dir="ltr"
+class="text-center  text-lg-start bg-body-tertiary text-muted" style="background-color: rgba(0, 0, 0, 0.05);">
 <style>
 footer{
 font-family: 'PlayPenSans';
@@ -60,16 +63,16 @@ footer img:hover{
         <!--  -->
         <div class="col-12  my-4 d-flex gap-4 justify-content-lg-end justify-content-center  align-items-center col-lg-4">
           <div class="d-flex flex-column gap-3 reveal-from-left">
-            <a href="" class="fs-4 bold text-black ">
+            <a href="{% url 'website:tos' %}" class="fs-4 bold text-black ">
               {% trans 'سياسة الخصوصية' %}
             </a>
-            <a href="" class="fs-4 fw- bold text-uppercase text-black ">
+            <a href="{% url 'website:teachers' %}" class="fs-4 fw- bold text-uppercase text-black ">
               {% trans 'اشترك معنا' %}
             </a>
           </div>
 
           <div>
-            <a href="#">
+            <a href="{% url 'website:landing' %}">
               <img src="{{ logo }}" alt="logo" style="width:60px;height:57px;">
             </a>
 
@@ -83,8 +86,11 @@ footer img:hover{
 
   <div class="text-center p-4 " style="background-color: rgba(220, 172, 172, 0) !important;">
     <hr>
-    © 2022 TalebAzhary
-    <a class="text-reset fw-bold" href="https://mdbootstrap.com/">TalebAzhary.com</a>
+    {{      copyright}}
+    <a class="text-reset fw-bold" href="https://mdbootstrap.com/">
+      {{domain}}
+      
+    </a>
   </div>
 
 </footer>

@@ -6,7 +6,7 @@ from django.views.generic      import TemplateView
 from django.contrib.auth       import login as auth_login
 from django.utils.translation  import gettext_lazy as _
 from django.contrib.auth.views import  LogoutView, LoginView
-from .forms import SignUpForm, ProfileUpdateForm
+from .forms import SignUpForm, ProfileUpdateForm, UserSearchForm
 from django.views.generic.edit import CreateView
 from django.contrib.auth       import get_user_model
 from django.urls               import reverse_lazy
@@ -17,6 +17,54 @@ from django.contrib.auth.decorators import login_required
 User = get_user_model()
 from django.contrib.auth.forms import PasswordChangeForm
 from users.models import PackageSubscribe, PaymentMethodUser, PaymentMethodPackage, AccessCourseRequest, AccessPackageRequest
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
+import os
+import pdfplumber
+import PyPDF2
+
+import google.generativeai as genai
+from django.utils.translation import get_language
+
+def extract_text_from_pdf(file_path):
+    text = ""
+
+    # Try pdfplumber first
+    try:
+        with pdfplumber.open(file_path) as pdf:
+            for page in pdf.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    text += page_text + "\n"
+        if text.strip():  # If we got something, return it
+            return text
+    except Exception as e:
+        print(f"[pdfplumber failed] {e}")
+
+    # Fallback to PyPDF2
+    try:
+        with open(file_path, "rb") as f:
+            reader = PyPDF2.PdfReader(f)
+            for page in reader.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    text += page_text + "\n"
+        if text.strip():
+            return text
+    except Exception as e:
+        print(f"[PyPDF2 failed] {e}")
+
+    return ""  # If both fail
+genai.configure(api_key="AIzaSyDZz60t1T1S05sELojH9gcxnAAYPjKp-k8")
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+
+
+
+
+
+
 
 
 class SubscriptedCoursesView(TemplateView):
@@ -153,7 +201,7 @@ class landing(TemplateView):
     def get(self, req):
 
         courses = Course.objects.filter(is_active=True)
-        teachers = User.objects.filter(role='teacher')
+        teachers = User.objects.filter(role='teacher', in_main_page=True)
         students = User.objects.filter(role='student').count()
         epS      = Episode.objects.filter(course__in=courses)
         # teachers = []
@@ -180,22 +228,67 @@ class landing(TemplateView):
 
 
 
+class TeachersView(TemplateView):
+    template_name = "pages/teachers.html"
+    def get(self, req):
+        q    = req.GET.get("q")
+        results = User.objects.filter(role='teacher')
+        context = {}
+        if q:
+            context["q"] = q
+
+            query = q
+
+            if query:
+                results = results.filter(
+                    Q(username__icontains=query) |
+                    Q(name_ar__icontains=query)
+                ).distinct()
+
+  
+        context["teachers"] = results
+        return render(req, self.template_name, context)
+
 class TeacherView(TemplateView):
     template_name = "pages/teacher.html"
     def get(self, req, slug):
 
-       course = Course.objects.get(slug=slug)
-       teacher = course.owner
-       courses = CourseLevel.objects.filter(owner=teacher)
-       
+       try:
+        teacher = User.objects.get(slug=slug)
+        courses = CourseLevel.objects.filter(owner=teacher)
+        result = 0
+
+        for i in teacher.courses.all() :
+            result += i.episodes.count()
+       except Exception as e:
+
+        messages.error(req, _("Teacher not found"))
+        return redirect("website:landing") 
        
        context = {
            "teacher"  : teacher,
            "courses"  : courses,
+           "hme"      : result,
 
        }
        return render(req,  self.template_name, context)
 
+
+
+class TOSView(TemplateView):
+    template_name = "pages/tos.html"
+    def get(self, req):
+        from .models import GlobalVars
+        language_code = get_language()
+        if language_code == 'ar':
+            tos = GlobalVars.objects.filter(Key="tos_ar").first()
+        else:
+            tos = GlobalVars.objects.filter(Key="tos_en").first()
+
+        context = {
+            "tos": tos.Value if tos else ""
+        }
+        return render(req, self.template_name,context )
 
 
 
@@ -242,12 +335,28 @@ class CourseView(TemplateView):
         level = CourseLevel.objects.get(slug_field=level_slug)
         course = Course.objects.get(slug=course_slug)
         epS    = Episode.objects.filter(course=course)
-
+        result = 0
+        print("test test")
+        if req.user.is_authenticated:
+            subscribed = req.user.subscriped_courses.filter(course=course, is_active=True)
+            print(subscribed)
+            if subscribed.count() :
+                for ep in epS:
+                    result += ep.results.filter(user=req.user).count()
+                result = result if result else 0
+                result = result/epS.count() * 100
+                print(result)
+            else:
+                subscribed = False
+        else:
+            subscribed = False
         context = {
             'course'  : course,
             'epS'     : epS,
             'level'   : level,
             "teacher"  : course.owner,
+            "subscribed" : subscribed,
+            "result"  : result,
         }
 
 
@@ -286,9 +395,9 @@ class  EpisodeView(TemplateView):
             context['score'] = qr.score
             context['total'] = qr.total
             context['per'] = int(round(qr.score / qr.total * 100))
-            print("no result")
+
         except:
-            print("esult")
+
             pass
 
         return render(req,  self.template_name, context)
@@ -361,18 +470,11 @@ class CourseViewFromProfile(TemplateView):
 
         course = Course.objects.get(slug=slug)
         level = CourseLevel.objects.filter(course=course).first()
-        epS    = Episode.objects.filter(course=course)
-
-        context = {
-            'course'  : course,
-            'epS'     : epS,
-            'level'   : level,
-            "teacher" : course.owner,
-        }
+        view = CourseView.get(self, req, level.slug_field, course.slug)
+        return view
 
 
 
-        return render(req,  self.template_name, context)
 
 
 
@@ -475,3 +577,29 @@ class SubscribeCoursesView(TemplateView):
         obj.save()
         messages.success(req, _("Course Subscribed Successfully, Waiting for the admin to approve"))
         return redirect("website:courseviewfromprofile", slug=slug)
+    
+
+
+
+
+def chatbot_view(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        question = data.get("message", "")
+        text = ""
+        try:
+            from .models import GloblaChatBot
+            for i in GloblaChatBot.objects.all():
+                if i.Prompt :
+                    text += i.Prompt
+            text += "and now the user asks: " + question
+            response = model.generate_content(text)
+            
+            return JsonResponse({"answer": response.text})
+
+        except Exception as e:
+            print(e)
+            return JsonResponse({"error": str(e)}, status=500)
+
+
+    return JsonResponse({"error": "Invalid request"}, status=400)

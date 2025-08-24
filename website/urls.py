@@ -1,6 +1,15 @@
 from django.urls import path, include
-from .views import landing, CustomLoginView,ForgotPasswordView, CustomLogoutView, CustomSignupView, TeacherView, LevelView, CourseView, EpisodeView, ProfileView, PasswordResetView, SubscriptedCoursesView, CourseViewFromProfile, SubscriptedPackagesView, SubscribeCoursesView
-
+from .views import( landing,
+  CustomLoginView,ForgotPasswordView,
+    CustomLogoutView, CustomSignupView,
+      TeacherView, LevelView, CourseView,
+        EpisodeView, ProfileView,
+          PasswordResetView, SubscriptedCoursesView,
+            CourseViewFromProfile,
+              SubscriptedPackagesView, TeachersView, 
+      SubscribeCoursesView, chatbot_view,
+      TOSView
+)
 app_name  = "website"
 
 urlpatterns = [
@@ -16,6 +25,7 @@ urlpatterns = [
 
 
 
+  path("teachers",         TeachersView.as_view(),                                                          name='teachers'  ),
   path('teacher/<slug:slug>/',         TeacherView.as_view(),                                                          name='teacher'  ),
   path('teacher/courses/<slug:slug>/',         LevelView.as_view(),                                                    name='courses'  ),
   path('teacher/course/<slug:slug>/',         CourseViewFromProfile.as_view(),                                         name='courseviewfromprofile'  ),
@@ -25,4 +35,8 @@ urlpatterns = [
 
   path('subscribe/<slug:slug>', SubscribeCoursesView.as_view(), name='subscrbecourse'),
   path('subscribe/packages/<slug:slug>/', SubscriptedPackagesView.as_view(), name='subscrbecourses'),
+
+  path('tos', TOSView.as_view(), name='tos'),
+  # AI
+  path("chatbot/ask/", chatbot_view, name="chatbot-ask")
 ]

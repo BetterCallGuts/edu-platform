@@ -1,0 +1,37 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% load i18n %}
+
+
+{% block base_title %}{% trans 'Term Of service' %}{% endblock %}
+
+{% block content %}
+
+<style>
+    .tos{
+        font-family: 'PlayPenSans';
+    }
+</style>
+    <div class="container tos mt-5 pt-5">
+        <h1 class="text-center fs-4">
+            {% trans 'شروط الاستخدام' %}
+        </h1>
+        <p class="text-center fs-4">
+            {% trans 'بالإضافة إلى الشروط الأساسية في شروط الخدمة المتاحة في موقع مايكل باستخدام هذا التطبيق ، يجب أن يكون لديك حق الاستخدام والاستفادة من هذا التطبيق بموجب أي ظروف تسبب في الاستخدام والاستفادة من هذا التطبيق.' %}
+        </p>
+        <p class="text-center fs-4">
+            {% trans 'يجب عليك أن تقر بالفعل الشروط المنقولة في هذا التطبيق قبل الاستخدام والاستفادة منه.' %}
+        </p>
+        <p
+        
+        {% if LANGUAGE_CODE  == 'ar' %}
+        dir="rtl"
+        {% else %}
+        dir="ltr"
+        {% endif %}
+        class=" fs-4">
+            {{tos}}
+        </p>
+    </div>
+
+{% endblock %}

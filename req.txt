@@ -5,3 +5,6 @@ django-cors-headers
 django-rest-framework
 Pillow
 gunicorn
+google-generativeai
+PyPDF2 
+pdfplumber

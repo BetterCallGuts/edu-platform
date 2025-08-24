@@ -6,7 +6,7 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import get_language
 from django.utils import timezone
-
+from website.models import ChatBotForEP
 User = get_user_model()
 
 
@@ -15,6 +15,7 @@ User = get_user_model()
 
 def refresh_objects(modeladmin, request, queryset):
     for obj in queryset:
+
         obj.save()  
     modeladmin.message_user(request, f"{queryset.count()} objects refreshed successfully.")
 
@@ -24,7 +25,15 @@ refresh_objects.short_description = _("Refresh (re-save) selected objects")
 @admin.action(description=_("Duplicate selected items"))
 def duplicate_objects(modeladmin, request, queryset):
     for obj in queryset:
-        obj.pk = None  # Reset the primary key
+        try:
+            obj.slug = None
+        except:
+            pass
+        try:
+            obj.slug_field = None
+        except:
+            pass
+        obj.pk = None  
         obj.save()
 
 
@@ -142,6 +151,13 @@ class EpisodeInline(admin.StackedInline):
     verbose_name = _('Episode')
     verbose_name_plural = _('Episodes')
 
+class ChatBotForEPInline(admin.StackedInline):
+    model = ChatBotForEP
+
+    extra = 0
+    verbose_name = _('Chat Bot For Episodes')
+    verbose_name_plural = _('Chat Bots For Episodes')
+
 
 # admin class
 class CourseAdmin(ModelAdmin):
@@ -207,6 +223,7 @@ class EpisodeAdmin(ModelAdmin):
     ]
     date_hierarchy = "created_at"
     inlines = [
+        ChatBotForEPInline,
         SummaryInline,
         QuizQuestionInline,
         QuizResultInline,

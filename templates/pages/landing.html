@@ -284,7 +284,10 @@
       </p>
 
       <div class="mt-3 btns__hero "  >
-        <a class="btn btn-primary wide__btn reveal-from-right" style="gap: 0.5rem;">
+        <a 
+        
+        href="{% url 'website:teachers' %}"
+        class="btn btn-primary wide__btn reveal-from-right" style="gap: 0.5rem;">
           <span>
 
 
@@ -476,7 +479,7 @@
 
 
 <!-- SWIPER SECTION -->
-{% if courses %}
+{% if teachers %}
 <style>
 
 
@@ -557,20 +560,21 @@
       style="padding-bottom: 88px;"
       >
 
-      {% for course in courses %}
+      {% for th in teachers %}
+      {% if th.thumbnail %}
             <swiper-slide>
-              <a href="{% url 'website:teacher' course.slug  %}">
+              <a href="{% url 'website:teacher' th.slug  %}">
                 <picture>
-                  <source srcset="{{course.thumbnail_pc.url}}" media="(min-width: 500px)">
-     
-                  <img src="{{course.thumbnail_mobile.url}}" alt="{{course.course_name_en}}" />
+
+                  
+                  <img src="{{th.thumbnail.url}}" alt="{{th.username}}" />
                 </picture>
                 
               </a>
               </swiper-slide>
 
-
-      {% endfor%}
+        {% endif %}
+    {% endfor %}
 
     </swiper-container>
 </section>

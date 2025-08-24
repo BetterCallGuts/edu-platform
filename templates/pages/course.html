@@ -35,14 +35,16 @@
 </style>
 
 
-<section class="container  d-flex flex-row justify-content-around  align-items-center py-3 reveal-from-left">
+<section class="container  d-flex flex-row justify-content-around  align-items-center py-3 ">
     
   
-        <h1>
+        <h1
+        style="font-family: 'PlayPenSans';"
+        class="text-center bold fs-sm-2 fs-md-1 fs-3 p-5 reveal-from-left">
             {{ course.get_course_language }}
         </h1>
 
-
+{% if subscribed %}
         <div class="sssss"  >
             <svg width="200" height="200" viewBox="0 0 36 36" class="circular-chart purple">
                 <path class="circle-bg"
@@ -52,17 +54,17 @@
                 />
                 {% comment %} progress {% endcomment %}
                 <path class="circle"
-                stroke-dasharray="70, 100"  
+                stroke-dasharray="{{result|stringformat:'s'}}, 100"
                 d="M18 2.0845
                 a 15.9155 15.9155 0 0 1 0 31.831
                 a 15.9155 15.9155 0 0 1 0 -31.831"
                 />
                 <text x="18" y="20.35" class="percentage" text-anchor="middle" alignment-baseline="middle">
                     {% comment %}  {% endcomment %}
-                    {% trans 'شاهدت' %}
+     
                     
                     
-                    70%
+                    {{result}}%
                 </text>
             </svg>
         </div>
@@ -91,7 +93,7 @@
             .circle {
                 fill: none;
                 stroke-width: 2.8;
-                stroke: #8a2be2;
+                stroke: #B19B6C;
                 stroke-linecap: round;
                 animation: progress 1s ease-out forwards;
             }
@@ -108,7 +110,13 @@
             }
             </style>
     
-    </div>
+{% else %}
+<a href="{% url 'website:subscrbecourse' course.slug %}" class="btn btn-primary wide__btn " style="gap: 0.5rem;">
+
+    {% trans 'subscribe' %}
+
+</a>
+{% endif %}
 </section>
 
    {% if course.thumbnail_pc %}
@@ -165,10 +173,16 @@
 
     </section>
 
-
+<p class="text-center fs-4">
+    {% if not subscribed %}
+    <a href="{% url 'website:subscrbecourse' course.slug %}" class="btn btn-primary wide__btn " style="gap: 0.5rem;">
+                {% trans 'اشترك في الكورس' %}
+            </a>
+    {% endif %}
+</p>
 <style>
     .epidS a:hover{
-transform: scale(.97);
+transform: translateX(30px);
     }
 </style>
 <div class="container p-5 epidS">
@@ -177,7 +191,9 @@ transform: scale(.97);
 
     <a class="
     reveal-from-right
-    row py-3 px-5 text-black" style="border: 1px black solid;border-radius: 10px;box-shadow: 3px -3px 1px 1px rgba(0, 0, 0, 0.805); text-decoration:none; transition: all 2s ease-in-out;" 
+    row py-3 
+    my-4
+    px-5 text-black" style="border: 1px black solid;border-radius: 10px;box-shadow: 3px -3px 1px 1px rgba(0, 0, 0, 0.805); text-decoration:none; transition: all .4s ease-in-out;" 
     
     href="{% url 'website:ep'  level.slug_field  course.slug  ep.slug %}"
     >
@@ -186,82 +202,39 @@ transform: scale(.97);
                 {{ep.get_episode_name}}
             </h3 >
             <p>
-                {{ep.get_episode_description}}
+                {{ep.get_episode_description|truncatechars:200}}
             </p>    
         </div>
-        <div class="col-md-2 col-12 d-flex justify-content-center" style="">
 
 
-            
-        <div class="sss"  >
-            <svg width="100" height="100" viewBox="0 0 36 36" class="circular-chart purple">
-                <path class="circle-bg"
-                d="M18 2.0845
-                a 15.9155 15.9155 0 0 1 0 31.831
-                a 15.9155 15.9155 0 0 1 0 -31.831"
-                />
-                {% comment %} progress {% endcomment %}
-                <path class="circle"
-                stroke-dasharray="70, 100"  
-                d="M18 2.0845
-                a 15.9155 15.9155 0 0 1 0 31.831
-                a 15.9155 15.9155 0 0 1 0 -31.831"
-                />
-                <text x="18" y="20.35" class="percentage" text-anchor="middle" alignment-baseline="middle">
-                    {% comment %}  {% endcomment %}
-                    {% trans 'شاهدت' %}
-                    
-                    
-                    70%
-                </text>
-            </svg>
-        </div>
         
+            {% if subscribed %}
+            {% for result in ep.results.all %}
+                {% if result.user == user%}
+                <i style="
+                color: #B19B6C;
+                width: fit-content; height: fit-content; align-self: center;"
+                class="bi fs-1 d-flex bi-check-all "></i>
 
+                {% endif %}
+            {% endfor %}
+            <i style="
+         
+            width: fit-content; height: fit-content; align-self: center;"
+            class="bi fs-1 d-flex bi-arrow-down-circle"></i>
+            {% else %}
+            <i style="
+         
+            width: fit-content; height: fit-content; align-self: center;"
+            class="bi fs-1 d-flex bi-file-lock"></i>
 
-        </div>
+            {% endif %}
+
     </a>
     {% endfor %}
 </div>
     
-        <style>
-            .sss svg{
-                height: 100px;
-            }
-            
-
-            .circular-chart {
-                display: block;
-                max-width: 100%;
-            }
-            
-            .circle-bg {
-                fill: none;
-                stroke: #eee;
-                stroke-width: 3.8;
-            }
-            
-            .circle {
-                fill: none;
-                stroke-width: 4;
-                stroke: #8a2be2;
-                stroke-linecap: round;
-                animation: progress 1s ease-out forwards;
-            }
-            
-            .percentage {
-                font-size: 3px;
-                fill: rgb(0, 0, 0);
-            }
-            @media (max-width:700px){
-
-            }
-            @keyframes progress {
-                0% {
-                    stroke-dasharray: 0, 100;
-                }
-            }
-            </style>
+    
 
 <!-- Social Background -->
  <style>

@@ -26,7 +26,7 @@ class User(AbstractUser):
     
 
 
-
+    name_ar = models.CharField(max_length=100, verbose_name=_('Name AR') , blank=True, null=True)
 
 
 
@@ -50,9 +50,14 @@ class User(AbstractUser):
 
     
 
-
+    in_main_page = models.BooleanField(default=True, verbose_name=_('In Main Page'))
     slug = models.SlugField(max_length=100, unique=True, verbose_name=_('Slug Field'), blank=True, null=True)
 
+    def get_name(self):
+        lang = get_language()
+        if self.name_ar:
+            return self.name_ar if lang == 'ar' else self.username
+        return self.username
 
     def delete(self, *args, **kwargs):
         r =super().delete(*args, **kwargs)
@@ -70,6 +75,21 @@ class User(AbstractUser):
 
             super().save(*args, **kwargs)
 
+class WhyChooseUser(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="whychooseuser", verbose_name=_('User'))
+    whychoose_en = models.TextField(max_length=1000, verbose_name=_('Why choose this teacher en'))
+    whychoose_ar = models.TextField(max_length=1000, verbose_name=_('Why choose this teacher ar'))
+
+    def get_whychoose(self):
+        lang = get_language()
+        return self.whychoose_ar if lang == 'ar' else self.whychoose_en
+    
+    class Meta:
+        verbose_name = _('Why Choose User')
+        verbose_name_plural = _('Why Choose Users')
+    
+    def __str__(self):
+        return f"{self.user.username}"
 
 class LiveStream(models.Model):
     PLATFORM_CHOICES = (
@@ -218,7 +238,7 @@ class AccessCourseRequest(models.Model):
 
 
 class AccessPackageRequest(models.Model):
-    teacher         = models.ManyToManyField(User,related_name="requestedpackagesaccess",   verbose_name=_('Teacher'), null=True, blank=True)
+    teacher         = models.ManyToManyField(User,related_name="requestedpackagesaccess",   verbose_name=_('Teacher'), )
     user            = models.ForeignKey(User, on_delete=models.CASCADE, related_name="packagesrequest", verbose_name=_('User'))
     package          = models.ForeignKey(PackageSubscribe, on_delete=models.CASCADE, related_name="accesss_packages_request", verbose_name=_('Package'))
 

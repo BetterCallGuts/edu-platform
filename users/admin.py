@@ -6,7 +6,7 @@ from django.contrib.auth.models import Group
 from course.admin import duplicate_objects, refresh_objects
 from course.models import SubscripedCourse, Course
 from django.contrib import admin
-from .models import PackageSubscribe, PaymentMethodPackage, PaymentMethodUser, LiveStream , AccessCourseRequest, AccessPackageRequest
+from .models import PackageSubscribe, PaymentMethodPackage, PaymentMethodUser, LiveStream , AccessCourseRequest, AccessPackageRequest, WhyChooseUser
 
 from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
@@ -51,6 +51,12 @@ class PaymentMethodInline(admin.StackedInline):
     verbose_name = _('Payment Method')
     verbose_name_plural = _('Payment Methods')
 
+class WhyChooseUserInline(admin.StackedInline):
+    model = WhyChooseUser
+    extra = 0
+    verbose_name = _('Why Choose User')
+    verbose_name_plural = _('Why Choose User points')
+
 
 
 class PaymentMethodPackageInline(admin.StackedInline):
@@ -68,14 +74,34 @@ class UserAdmin(BaseUserAdmin):
     # print(BaseUserAdmin.fieldsets,  [None, {'fields': ('role', 'student_limit')}] )
     fieldsets = list(BaseUserAdmin.fieldsets) +         [("system", {
         'fields': ('phone','role', 'student_limit', "teacher", "slug")
- })] +     [("page", {'fields': ('thumbnail','first_section', 'text_in_picture', "text_below", "second_section", "third_section", "fourth_section", "social_background", "instgram_link","instgram_icon", "facebook_link","facebook_icon", "youtube_link", "youtube_icon", )})]       
+ })] +     [("page", {'fields': (
+          'thumbnail',
+            'first_section',
+              'text_in_picture',
+                "text_below",
+                  "second_section",
+                    "third_section",
+                      "fourth_section",
+                        "social_background",
+                          "instgram_link",
+                          "instgram_icon",
+                            "facebook_link",
+                            "facebook_icon",
+                              "youtube_link",
+                                "youtube_icon",
+                                 "in_main_page",
+                                    "name_ar",
+                                  )})]       
     search_fields = BaseUserAdmin.search_fields + ('role', 'student_limit', 'phone')
     actions = [
         refresh_objects,
         duplicate_objects,
     ]
 
-    inlines = [PaymentMethodInline]
+    inlines = [
+        
+        WhyChooseUserInline,
+        PaymentMethodInline]
 
     def get_list_display(self, request):
         base_fields = super().get_list_display(request)

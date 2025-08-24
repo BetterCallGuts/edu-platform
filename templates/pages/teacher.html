@@ -119,14 +119,174 @@
 {% endif %}
 
 
-{% if teacher.second_section%}
-
-
-
-<div style="position: relative;" class="p-1">
+{% if teacher.whychooseuser.all %}
+<div style="position: relative;" class="">
     
     
-    <section class="container-fluid  reveal-from-left">
+    <section class="container-fluid d-flex
+    {% if LANGUAGE_CODE  == 'ar' %}
+    justify-content-end
+    {% else %}
+    justify-content-start
+    {% endif %}
+    reveal-from-left
+    
+    px-3
+    ">
+    
+    <h1 class="fs-3 position-relative"
+    {% if LANGUAGE_CODE  == 'ar' %}
+    dir="rtl"
+    {% else %}
+    dir="ltr"
+    {% endif %}
+    
+    >
+            <img src="{% static 'mat/arrow_down.svg' %}"
+            style="position: absolute; bottom: 0; right: 0; width: 50px; height: 50px; transform: translateY(100%)translateX(50%);"
+            alt="{{ teacher.username}}" class="img-fluid">
+            {% trans 'Why Choose ' %}
+            <span class="highlight fs-1">
+
+                {{ teacher.get_name }}
+            </span>
+        </h1>
+
+    </section>
+</div>
+
+
+
+
+
+<div style="position: relative;" class="py-5">
+    
+    
+    <section class="container-fluid  reveal-from-right">
+        
+        {% for about in teacher.whychooseuser.all %}
+     
+            <div class="row d-flex
+            px-5
+            {% if LANGUAGE_CODE  == 'ar' %}
+            justify-content-end
+            {% else %}
+            justify-content-start
+            {% endif %}
+            ">
+                <div class="col-6 mb-3 text-center"  style="border: 1px dashed black;">
+                    <div class="p-3">
+                        <div class="card-body">
+                            <h5 class="card-title text-black fs-3">{{ about.get_whychoose }}</h5>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1"></div>
+            </div>
+        {% endfor %}
+        
+    </section>
+</div>
+{% endif %}
+
+
+
+<style>
+  .fifth__section{
+    font-family: 'PlayPenSans';
+    font-weight: 800 ;
+    /* margin: ; */
+    {% if course.info_background %}
+    
+    background: url('{{ course.info_background.url }}') no-repeat center center;
+    {% else %}
+    background: url('{% static "mat/Rectangle 7.svg" %}')  no-repeat   center center;
+    {% endif %}
+    background-size: cover;
+    color: #fff;
+  
+  }
+
+  .fifth__section .row > div:nth-child(-n+2) {
+  
+  border-right: 2px solid  #fff;
+
+
+}
+ @media (max-width: 767px) {
+
+  .fifth__section .row > div:nth-child(-n+3) {
+      border-bottom: 2px solid  #fff;
+        border-right: none;
+        padding-top: 20px;
+        padding-bottom: 20px;
+  } 
+ }
+</style>
+
+
+<section 
+style="transition: 4s;"
+class=" fifth__section py-5 container-xxl	reveal-from-left px-3 "  > 
+
+
+  <div class="row">
+
+<!--  -->
+    <div class="col-12 text-center col-md-2">
+      
+        <img src="{% static 'mat/Object.svg' %}" alt="{{ teacher.username}}" class="img-fluid">
+
+    </div>
+
+    <!--  -->
+ 
+
+    <!--  -->
+    <div class="col-12 text-center col-md-5">
+       <p class="fs-5">
+        {% trans 'عدد الدروس المرفوعة' %}
+    </p>
+        <h3 class="text-center fs-4">
+
+          {{hme}}
+
+
+        </h3>
+    </div>
+
+    <div class="col-12 text-center col-md-5"  >
+       <p class="fs-5">   
+        {% trans 'عدد الطلاب المشتركين' %}
+
+
+</p>
+        <h3 class="text-center fs-4">
+
+          
+          {{teacher.subscriped_courses.count}}
+            
+
+
+
+        </h3>
+    </div>
+
+  
+
+
+  </div>
+
+
+</section>
+
+{% if teacher.second_section %}
+
+<div style="position: relative;" class="py-5">
+    
+    
+    <section class="container-fluid  reveal-from-right">
         
         <img src="{{ teacher.second_section.url }}" alt="{{ teacher.username }}" class="img-fluid">
         
@@ -134,8 +294,7 @@
 </div>
 {% endif %}
 
-
-{% if teacher.third_section%}
+{% if teacher.third_section %}
 
 <div style="position: relative;" class="py-5">
     
@@ -148,7 +307,7 @@
 </div>
 {% endif %}
 
-{% if teacher.fourth_section%}
+{% if teacher.fourth_section %}
 
 <div style="position: relative;" class="py-2">
     
@@ -302,7 +461,7 @@
             <h1 class="col-6  text-end ">
                 {% trans 'تواصل مع مع مستر' %}
                 <br>
-                {% trans teacher.username %}
+                {% trans teacher.get_name %}
             </h1>
         </div>
     </section>

@@ -21,7 +21,13 @@ def default_end_date():
 
 class Course(models.Model):
 
-    owner = models.ForeignKey(User, on_delete=models.CASCADE , verbose_name=_('Owner'))
+    owner = models.ForeignKey(User, on_delete=models.CASCADE ,
+                              
+                              
+                               verbose_name=_('Owner'),
+                               related_name='courses'
+                               
+                               )
 
     
 
@@ -62,13 +68,17 @@ class Course(models.Model):
         if self.thumbnail_mobile:
             return mark_safe( f"<img src='{self.thumbnail_mobile.url}' width='300px'   alt='{self.course_name_en}'>")
         else: return None
-    
+
+
+
     def get_course_language(self):
         lang = get_language()
         return self.course_name_ar if lang == 'ar' else self.course_name_en
+
     def get_course_description_language(self):
         lang = get_language()
         return self.course_description_ar if lang == 'ar' else self.course_description_en
+
     show_thumbnail_mobile.short_description = _('Thumbnail Mobile')
     show_thumbnail_pc.short_description = _('Thumbnail PC')
 
@@ -80,9 +90,10 @@ class Course(models.Model):
         except:
             pass
         return r
-    
+
     def __str__(self):
-        return self.course_name_ar
+
+        return f"{self.get_course_language()} - {self.owner.username} - {self.slug}"
     
 
 
@@ -295,7 +306,7 @@ class AboutTheCourse(models.Model):
 
 class SubscripedCourse(models.Model):
     course          = models.ForeignKey(Course, on_delete=models.CASCADE , verbose_name=_('Course'), related_name='subscriped_courses')
-    user            = models.ForeignKey(User,   on_delete=models.CASCADE , verbose_name=_('Owner'))
+    user            = models.ForeignKey(User,   on_delete=models.CASCADE , verbose_name=_('Owner'), related_name='subscriped_courses')
     is_active       = models.BooleanField(default=True, verbose_name=_('Is Active'))
     created_at      = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
     updated_at      = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
