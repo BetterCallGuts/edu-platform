@@ -130,6 +130,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
+DATA_UPLOAD_MAX_MEMORY_SIZE = 524288000   # 500 MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 524288000
 
 DATABASES = {
     'default': {
