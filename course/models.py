@@ -42,6 +42,8 @@ class Course(models.Model):
     info_background  = models.ImageField(upload_to='course_images/' , verbose_name=_('Course Info Background'), blank=True, null=True)
     title_background = models.ImageField(upload_to='course_images/' , verbose_name=_('Course title in'), blank=True, null=True)
         
+    cost             = models.FloatField(default=0, verbose_name=_('Cost'))
+    currency         = models.CharField(max_length=10, default='EGP', verbose_name=_('Currency'))
     def save(self, *args, **kwargs):
         if self.pk is None:
             super().save(*args, **kwargs)
@@ -94,6 +96,8 @@ class CourseLevel(models.Model):
     course_level_en = models.CharField(max_length=100 , verbose_name=_('Course Level en'))
     slug_field      = models.SlugField(max_length=100, unique=True, verbose_name=_('Slug Field'), blank=True, null=True)
 
+    description_ar = models.TextField(verbose_name=_('Course Level Description ar'))
+    description_en = models.TextField(verbose_name=_('Course Level Description en'))
 
     is_active       = models.BooleanField(default=True, verbose_name=_('Is Active'))
 
@@ -116,6 +120,9 @@ class CourseLevel(models.Model):
         lang = get_language()
         return self.course_level_ar if lang == 'ar' else self.course_level_en
 
+    def get_description(self):
+        lang = get_language()
+        return self.description_ar if lang == 'ar' else self.description_en
     
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -264,7 +271,7 @@ class Episode(models.Model):
 
 
 class AboutTheCourse(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE , verbose_name=_('Course'), related_name='about_the_courses')
+    level = models.ForeignKey(CourseLevel, on_delete=models.CASCADE , verbose_name=_('Course'), related_name='about_the_courses')
     # owner  = models.ForeignKey(User, on_delete=models.CASCADE , verbose_name=_('Owner'))
 
     about_the_course_ar = models.TextField( verbose_name=_('About The Course ar'))

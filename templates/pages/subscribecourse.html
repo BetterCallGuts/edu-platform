@@ -1,0 +1,169 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% load i18n %}
+
+
+{% block base_title %}subscribe {{course.course_name_en}}{% endblock %}
+
+{% block content %}
+{% if LANGUAGE_CODE  == 'ar' %}
+<style>
+    .ararar{
+        direction: rtl;
+        font-family: 'PlayPenSans';
+    }
+</style>
+{% endif %}
+
+<div class="container py-5 ararar">
+  <!-- Course Info -->
+   {% if teacher.thumbnail %}
+   <img src="{{ teacher.thumbnail.url }}" alt="{{ teacher.username }}"
+   
+   class="
+   reveal-from-left
+   img-fluid rounded mb-4" style="border: 4px dashed black; box-shadow:7px -6px 1px 3px rgba(0, 0, 0, 0.722);">
+   {% endif %}
+  <div class="text-center mb-5">
+    <h2 class="fw-bold  reveal-from-right">{% trans "Subscribe to" %} {{ course.get_course_language }}</h2>
+    <p class="text-muted reveal-from-left">{% trans "Teacher:" %} {{ teacher.username }}</p>
+    <p>
+       <span class="reveal-from-right" style="display: inline-block;">
+
+           {% trans "The course cost is:" %}
+       </span>
+        <h3 class="reveal-from-left">
+
+            {{ course.cost }} {{ course.currency }}
+        </h3> 
+    </p>
+  </div>
+  <form 
+  enctype="multipart/form-data"
+  method="post">
+    <div class="d-flex justify-content-center gap-5">
+
+        {% for paymentmethod in pmS %}
+            <div class="mb-3  
+            text-center
+            reveal-from-right" style="transition: all 4s ease-in-out;">
+                <h4 class="">{{ paymentmethod.get_method }}</h4>
+                <p>{{ paymentmethod.number }}</p>
+                {% if paymentmethod.photo %}
+                <img src="{{ paymentmethod.photo.url }}" alt="{{ paymentmethod.username }}"
+                
+                class="border border-4 mb-4"
+                style="
+                max-width: 400px;
+                ">
+    
+            </div>
+            {% endif %}
+        {% endfor %}
+        
+    </div>
+
+
+    {% csrf_token %}
+      <div class="form-group mb-3 reveal-from-right" style="transition: all 4s ease-in-out;">
+        <label for="account_info">{% trans "Number your're sending from or the account mail" %}</label>
+        <input type="text" required class="form-control" name="account_info" id="account_info" placeholder="Enter your account info">
+      </div>
+
+      <div class="form-group mb-3 reveal-from-left" style="transition: all 4s ease-in-out;">
+        <label for="eved">{% trans "Take a screen shot and share the file or the img here" %}</label>
+        <input type="file" required class="form-control" name="eved" id="eved" placeholder="Share the img or the file for the payment ">
+      </div>
+
+    <div class="form-group mb-3">
+        <button class="btn wide__btn btn-primary" type="submit">{% trans "Subscribe" %}</button>
+    </div>
+
+</form>
+
+
+{% if packages %}
+<hr>
+<h1>
+    {% trans "Check out our packages !" %}
+</h1>
+    <!-- <div class="d-flex justify-content-center gap-5">
+
+        {% for paymentmethod in packages.paymentmethodpackages.all %}
+        dasda
+                <div class="mb-3  
+                text-center
+                reveal-from-right" style="transition: all 4s ease-in-out;">
+                    <h4 class="">{{ paymentmethod.get_method }}</h4>
+                    <p>{{ paymentmethod.number }}</p>
+                    {% if paymentmethod.photo %}
+                    <img src="{{ paymentmethod.photo.url }}" alt="{{ paymentmethod.username }}"
+                    
+                    class="border border-4 mb-4"
+                    style="
+                    max-width: 400px;
+                    ">
+        
+                </div>
+            {% endif %}
+        {% endfor %}
+        
+    </div> -->
+
+
+<style>
+    .courses_section a {
+        text-decoration: none;
+    }
+    .package_transition{
+        transition: all .4s ease-in-out;
+        border: 1px solid black;
+        box-shadow: 4px -4px 1px 2px rgba(87, 87, 87, 0.216);
+
+    }
+    .package_transition:hover{
+        transform: scale(1.1);
+    }
+</style>
+<div class="container courses_section py-5">
+    <div class="row
+    d-flex 
+    justify-content-center
+    reveal-from-left">
+        {% for package in packages %}
+            <div class="col-12 mb-3 text-center" style="max-width: 700px;">
+                <a  href='{% url "website:subscrbecourses" package.slug %}' class="card package_transition" >
+
+                    {% if package.thumbnail %}
+                    <img src="{{ package.thumbnail.url }}" alt="{{ package.packagename_en }}" class="card-img-top">    
+                    {% endif %}
+                    <div class="card-body">
+
+                            <h5 class="card-title text-black "  >{{ package.get_package_name }}</h5>
+                            <p class="card-text">
+                                {% trans "Cost" %}
+                                {{ package.price }}
+                                {{ package.currency }}
+
+                            </p>
+                            <p class="card-text">{{ course.get_course_description_language|truncatechars:50 }}</p>
+
+                    </div>
+                </a>
+            </div>
+
+
+        </div><div class="row">
+
+        {% endfor %}
+    </div>
+</div>
+
+        {% endif %}
+
+
+
+</div>
+
+    
+{% endblock %}

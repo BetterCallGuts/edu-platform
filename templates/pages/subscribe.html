@@ -1,0 +1,27 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% load i18n %}
+
+
+{% block base_title %}{% trans 'Levels' %}{% endblock %}
+
+{% block content %}
+
+
+
+    {% for level in levels %}
+
+
+        <div class="card text-center">
+            
+            <div class="card-body">
+                <h5 class="card-title">{{level.get_course_level}}</h5>
+                <a href="{% url 'course:courses' level.slug_field %}" class="btn btn-primary">{% trans 'View the Course' %}</a>
+            </div>
+
+        </div>
+
+        
+     {% endfor %}
+    
+{% endblock %}

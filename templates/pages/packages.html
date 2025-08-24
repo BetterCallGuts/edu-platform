@@ -1,0 +1,95 @@
+{% extends 'components/base.html' %}
+{% load static %}
+{% load i18n %}
+
+
+{% block base_title %}
+{{ packages.packagename_en }}
+{% endblock %}
+
+{% block content %}
+{% if LANGUAGE_CODE  == 'ar' %}
+<style>
+    .ararar{
+        direction: rtl;
+        font-family: 'PlayPenSans';
+    }
+</style>
+{% endif %}
+
+<div class="container py-5 ararar">
+  <!-- Course Info -->
+   {% if packages.thumbnail %}
+   <img
+    
+
+   src="{{ packages.thumbnail.url }}" alt="{{ packages.get_package_name }}"
+   
+   class="
+   reveal-from-left
+   img-fluid rounded mb-4" style="border: 4px dashed black; box-shadow:7px -6px 1px 3px rgba(0, 0, 0, 0.722);margin: 0 auto; display: flex;">
+   {% endif %}
+  <div class="text-center mb-5">
+    <h2 class="fw-bold  reveal-from-right">{% trans "Subscribe to" %} {{ packages.get_package_name }}</h2>
+    <p class="text-muted reveal-from-left">{% trans "package:" %} {{ packages.get_description }}</p>
+    <p>
+       <span class="reveal-from-right" style="display: inline-block;">
+
+           {% trans "The Package cost is:" %}
+       </span>
+        <h3 class="reveal-from-left">
+
+            {{ packages.price }} {{ packages.currency }}
+        </h3> 
+    </p>
+  </div>
+  <form 
+  enctype="multipart/form-data"
+  method="post">
+    <div class="d-flex justify-content-center gap-5">
+
+        {% for paymentmethod in packages.paymentmethodpackages.all %}
+            <div class="mb-3  
+            text-center
+            reveal-from-right" style="transition: all 4s ease-in-out;">
+                <h4 class="">{{ paymentmethod.get_method }}</h4>
+                <p>{{ paymentmethod.number }}</p>
+                {% if paymentmethod.photo %}
+                <img src="{{ paymentmethod.photo.url }}" alt="{{ paymentmethod.username }}"
+                
+                class="border border-4 mb-4"
+                style="
+                max-width: 400px;
+                ">
+    
+            </div>
+            {% endif %}
+        {% endfor %}
+        
+    </div>
+
+
+    {% csrf_token %}
+      <div class="form-group mb-3 reveal-from-right" style="transition: all 4s ease-in-out;">
+        <label for="account_info">{% trans "Number your're sending from or the account mail" %}</label>
+        <input type="text" required class="form-control" name="account_info" id="account_info" placeholder="Enter your account info">
+      </div>
+
+      <div class="form-group mb-3 reveal-from-left" style="transition: all 4s ease-in-out;">
+        <label for="eved">{% trans "Take a screen shot and share the file or the img here" %}</label>
+        <input type="file" required class="form-control" name="eved" id="eved" placeholder="Share the img or the file for the payment ">
+      </div>
+
+    <div class="form-group mb-3">
+        <button class="btn wide__btn btn-primary" type="submit">{% trans "Subscribe" %}</button>
+    </div>
+
+</form>
+
+
+
+
+</div>
+
+    
+{% endblock %}

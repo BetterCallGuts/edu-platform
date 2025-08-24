@@ -4,3 +4,4 @@ django-jazzmin
 django-cors-headers
 django-rest-framework
 Pillow
+gunicorn

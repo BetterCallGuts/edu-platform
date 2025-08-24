@@ -169,12 +169,23 @@ class CourseAdmin(ModelAdmin):
         ]
 
 
-    inlines = [LevelInline, TypeInline, EpisodeInline, AboutTheCourseInline]
+    inlines = [LevelInline, TypeInline, EpisodeInline]
 
 class CourseLevelAdmin(ModelAdmin):
     list_display = ["get_courses", "owner", "show_thumbnail","course_level_ar", "course_level_en"]
-    search_fields = ["course_level_ar", "course_level_en", "owner__username", "owner__email", "course__course_name_ar"]
+    search_fields = [
+        
+        
+        "course_level_ar",
+          "course_level_en",
+            "owner__username",
+              "owner__email",
+                "course__course_name_ar",
+                "description_ar",
+                "description_en",
+                ]
     list_filter = ["owner", "course"]
+    inlines = [AboutTheCourseInline]
     def get_courses(self, obj):
         return ", ".join([course.course_name_ar for course in obj.course.all()])
     get_courses.short_description = _('Courses')
@@ -226,13 +237,14 @@ class QuizQuestionModelAdmin(admin.ModelAdmin):
     
     ]
 
+class SubscripedCourseModelAdmin(admin.ModelAdmin):
 
-
+    list_display = ["course", "user", "is_active", "created_at", "updated_at"]
 admin_site.register(Course, CourseAdmin)
 admin_site.register(CourseLevel, CourseLevelAdmin)
 admin_site.register(Episode, EpisodeAdmin)
 admin_site.register(AboutTheCourse)
-admin_site.register(SubscripedCourse)
+admin_site.register(SubscripedCourse, SubscripedCourseModelAdmin)
 admin_site.register(watchedepisods)
 admin_site.register(Summary)
 admin_site.register(QuizQuestion,  QuizQuestionModelAdmin)

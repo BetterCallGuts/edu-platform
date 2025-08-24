@@ -3,17 +3,17 @@
 {% load i18n %}
 
 
-{% block base_title %}{% trans course.get_course_language %}- {% trans teacher.username %}{% endblock %}
+{% block base_title %}{{ level.get_course_level }}-{{ teacher.username }}{% endblock %}
 
 {% block content %}
-<section style="font-family: 'PlayPenSans';">
+<section style="font-family: 'PlayPenSans';" class="mt-5 pt-5">
 
 <style>
             .below___::after{
 
             content: '';
             position: absolute;
-            bottom: 0;
+            bottom: 0; 
             left: 0;
             width: 50px;
             height: 50px;
@@ -39,83 +39,28 @@
     
   
         <h1>
-            {{ course.get_course_language }}
+            {{ level.get_course_level }}
         </h1>
 
 
-        <div class="sssss"  >
-            <svg width="200" height="200" viewBox="0 0 36 36" class="circular-chart purple">
-                <path class="circle-bg"
-                d="M18 2.0845
-                a 15.9155 15.9155 0 0 1 0 31.831
-                a 15.9155 15.9155 0 0 1 0 -31.831"
-                />
-                {% comment %} progress {% endcomment %}
-                <path class="circle"
-                stroke-dasharray="70, 100"  
-                d="M18 2.0845
-                a 15.9155 15.9155 0 0 1 0 31.831
-                a 15.9155 15.9155 0 0 1 0 -31.831"
-                />
-                <text x="18" y="20.35" class="percentage" text-anchor="middle" alignment-baseline="middle">
-                    {% comment %}  {% endcomment %}
-                    {% trans 'شاهدت' %}
-                    
-                    
-                    70%
-                </text>
-            </svg>
-        </div>
-        
-        <style>
-            .sssss svg{
-                height: 300px;
-            }
-            
-            @media (max-width:500px ){
-                .sssss svg {
-                    height: 100px;
-                }
-            }
-            .circular-chart {
-                display: block;
-                max-width: 100%;
-            }
-            
-            .circle-bg {
-                fill: none;
-                stroke: #eee;
-                stroke-width: 3.8;
-            }
-            
-            .circle {
-                fill: none;
-                stroke-width: 2.8;
-                stroke: #8a2be2;
-                stroke-linecap: round;
-                animation: progress 1s ease-out forwards;
-            }
-            
-            .percentage {
-                font-size: 3px;
-                fill: rgb(0, 0, 0);
-            }
-            
-            @keyframes progress {
-                0% {
-                    stroke-dasharray: 0, 100;
-                }
-            }
-            </style>
-    
+      
     </div>
 </section>
-
+{% if teacher.thumbnail %}
    
    <section class="container" >
-    <img src="{{course.thumbnail_pc.url}}" style="border-radius: 10px;" alt="{{ course.course_name_en }}" class="img-fluid">
+    <img src="{{teacher.thumbnail.url}}" style="
+        
+        border-radius: 10px;
+        border: 2px dashed black;
+        box-shadow: 10px -10px 1px 1px  rgba(27, 26, 26, 1);
+        
+        " alt="{{ level.slug_field }}" class="img-fluid">
    </section>
+{% endif %}
 
+
+{% if level.description_en or level.description_ar %}
 <div style="position: relative;" class=" p-5">
     
     
@@ -124,19 +69,20 @@
         
         <div class="row ">
             <div class="py-5 fs-md-2 text-center text-wrap">
-                {% trans course.get_course_description_language %}
+                {{ level.get_description }}
             </div>
         </div>
         
     </section>
 </div>
 
+{% endif %}
 
 
 
 
 
-
+{% if level.about_the_courses.all %}
 <div style="position: relative;" class="p-1">
     
     
@@ -156,7 +102,7 @@
     
     <section class="container-fluid  reveal-from-right">
         
-        {% for about in course.about_the_courses.all %}
+        {% for about in level.about_the_courses.all %}
      
             <div class="row d-flex justify-content-end">
                 <div class="col-6 mb-3 text-center"  style="border: 1px dashed black;">
@@ -173,7 +119,7 @@
         
     </section>
 </div>
-
+{% endif %}
 
 
 
@@ -351,12 +297,14 @@ class=" fifth__section py-5 container-xxl	reveal-from-left px-3 "  >
         {% if teacher.social_background %}
         background: url('{{ teacher.social_background.url }}') no-repeat center center;
         background-position: center center;
+
         {% else %}
         border: 3px  dashed  black;
         {% endif %}
             /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.226); */
 
-            background-size: contain;
+            background-size: cover;
+
 
     }
     .social_media img{
@@ -407,13 +355,13 @@ class=" fifth__section py-5 container-xxl	reveal-from-left px-3 "  >
 }
 
  </style>
-<div style="" class=" container-fluid p-5 social__section">
+<div style="" class="  p-5 m-5 social__section">
     
     
-    <section class="container-fluid social_media_-section  reveal-from-left">
+    <section class=" social_media_-section  reveal-from-left">
         <div class="row">
 
-            <div class="social_media col-6  ">
+            <div class="container social_media col-6  ">
                 {% if teacher.instgram_link and teacher.instgram_icon %}
                     <a href="{{ teacher.instgram_link }}" target="_blank">
                         <img src="{{ teacher.instgram_icon.url }}" alt="{{ teacher.username }}" class="img-fluid">

@@ -24,5 +24,5 @@ urlpatterns = [
   
 
   path('subscribe/<slug:slug>', SubscribeCoursesView.as_view(), name='subscrbecourse'),
-  path('subscribe/packages/', SubscriptedPackagesView.as_view(), name='subscrbecourses'),
+  path('subscribe/packages/<slug:slug>/', SubscriptedPackagesView.as_view(), name='subscrbecourses'),
 ]

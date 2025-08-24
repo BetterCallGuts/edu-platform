@@ -16,7 +16,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 User = get_user_model()
 from django.contrib.auth.forms import PasswordChangeForm
-
+from users.models import PackageSubscribe, PaymentMethodUser, PaymentMethodPackage, AccessCourseRequest, AccessPackageRequest
 
 
 class SubscriptedCoursesView(TemplateView):
@@ -204,12 +204,11 @@ class LevelView(TemplateView):
     def get(self, req, slug):
 
        level = CourseLevel.objects.get(slug_field=slug)
-       course = level.course
        teacher = level.owner
        courses = level.course.all()
 
        how_many_ep = 0
-       result = 0
+
        duration = 0
        for i in courses:
            episodes = i.episodes.all()
@@ -224,7 +223,7 @@ class LevelView(TemplateView):
        course_hours      = course_hours if course_hours else 0
        context = {
            "teacher"  : teacher,
-           "course"  : course,
+            "level"  : level,
            "courses"  : courses,
            "hms"      : how_many_students,
            "hme"      : how_many_ep,
@@ -265,10 +264,10 @@ class  EpisodeView(TemplateView):
         if req.user.is_authenticated:
             sb = SubscripedCourse.objects.filter(user=req.user, course=course)
             if sb.count() == 0:
-                messages.error(req, _("You have not subscribed to this course."))
-                return redirect("website:subscrbe")
+                messages.info(req, _("You have not subscribed to this course."))
+                return redirect("website:subscrbecourse", slug=course_slug)
         else:
-            messages.error(req, _("Please login to access this page."))
+            messages.info(req, _("Please login to access this page."))
             return redirect("website:login")
 
         level = CourseLevel.objects.get(slug_field=level_slug)
@@ -381,8 +380,98 @@ class CourseViewFromProfile(TemplateView):
 
 class SubscriptedPackagesView(TemplateView):
     template_name = "pages/packages.html"
-    pass
+    
+    
+    def get(self, req, slug):
+        if not req.user.is_authenticated:
+            messages.info(req, _("Please login to access this page."))
+            return redirect("website:login")
+        try:
+            packages = PackageSubscribe.objects.get(slug=slug)
+        except:
+            messages.error(req, _("Package not found"))
+            return redirect("website:landing")
+        
+        context = {
+            "packages": packages,
+        }
+        return render(req, self.template_name, context)
+
+
+    def post(self, req, slug):
+        if not req.user.is_authenticated:
+            messages.info(req, _("Please login to access this page."))
+            return redirect("website:login")
+        try:
+            package = PackageSubscribe.objects.get(slug=slug)
+
+            teachers = package.user.all()
+
+        except:
+            messages.error(req, _("Package not found"))
+            return redirect("website:landing")
+        obj = AccessPackageRequest.objects.create(
+            
+            user=req.user,
+            package=package,
+            account_info=req.POST.get("account_info"),
+            screen_shot=req.FILES.get("eved"),
+        )
+        for teacher in teachers:
+            obj.teacher.add(teacher)
+
+        obj.save()
+        messages.success(req, _("Package Subscribed Successfully, Waiting for the admin to approve"))
+        return redirect("website:landing")
+
 
 class SubscribeCoursesView(TemplateView):
     template_name = "pages/subscribecourse.html"
-    pass
+    
+    def get (self, req, slug):
+        if not req.user.is_authenticated:
+            messages.info(req, _("Please login to access this page."))
+            return redirect("website:login")
+        try:
+            course = Course.objects.get(slug=slug)
+        except:
+            messages.error(req, _("Course not found"))
+            return redirect("website:landing")
+
+
+        teacher = course.owner
+        packages = PackageSubscribe.objects.filter(user= teacher, is_active=True)
+        paymentmethods = PaymentMethodUser.objects.filter(user=teacher, is_active=True)
+
+        context = {
+            "course": course,
+            "teacher": teacher,
+            "packages": packages,
+            "pmS"     : paymentmethods,
+        }
+
+        return render(req, self.template_name, context)
+    
+
+    def post(self, req, slug):
+        if not req.user.is_authenticated:
+            messages.info(req, _("Please login to access this page."))
+            return redirect("website:login")
+        try:
+            course = Course.objects.get(slug=slug)
+            print(req.POST)
+            print(req.FILES)
+
+        except:
+            messages.error(req, _("Course not found"))
+            return redirect("website:landing")
+        obj = AccessCourseRequest.objects.create(
+            teacher=course.owner,
+            user=req.user,
+            course=course,
+            account_info=req.POST.get("account_info"),
+            screen_shot=req.FILES.get("eved"),
+        )
+        obj.save()
+        messages.success(req, _("Course Subscribed Successfully, Waiting for the admin to approve"))
+        return redirect("website:courseviewfromprofile", slug=slug)
